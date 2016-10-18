@@ -1,0 +1,149 @@
+[
+    {
+        "type": "title",
+        "title": "Global Game Settings (takes effect immediately)"
+    },
+    {
+        "type": "bool",
+        "title": "Tutorial",
+        "section": "General",
+        "key": "tutorial"
+    },
+    {"type": "bool",
+        "title": "Sound",
+        "section": "General",
+        "key": "sound"
+    },
+    {"type": "bool",
+        "title": "fast Play - accelerates some animations",
+        "section": "General",
+        "key": "fastPlay"
+    },
+    {"type": "bool",
+        "title": "Effects - switch off if running older hardware",
+        "section": "General",
+        "key": "effects"
+    },
+    {"type": "bool",
+        "title": "Simple fonts - switch on if running older hardware",
+        "section": "General",
+        "key": "simplefuntext"
+    },
+    {"type": "bool",
+        "title": "Simple background - switch on if running older hardware",
+        "section": "General",
+        "key": "simplebackground"
+    },
+    {"type": "bool",
+        "title": "Simple card design - switch on if running older hardware (ignored if you have a design activated from the shop screen)",
+        "section": "General",
+        "key": "simplecardback"
+    },
+    {"type": "bool",
+        "title": "Show the table image",
+        "section": "General",
+        "key": "table"
+    },
+    {
+        "type": "title",
+        "title": "Game Variation Settings (takes effect next new game)"
+    },
+    {"type": "options",
+        "title": "Number of Players",
+        "section": "Varients",
+        "key": "playerCount",
+        "options": ["2","3","4"]
+    },
+    {"type": "options",
+        "title": "Number of Poker Rounds",
+        "section": "Varients",
+        "key": "roundCount",
+        "options": ["2","3","4"]
+    },
+    {"type": "options",
+        "title": "Straight Flush Value",
+        "section": "Varients",
+        "key": "straightFlushValue",
+        "options": ["8","10","52"]
+    },
+    {"type": "options",
+        "title": "Card exchange points limit",
+        "section": "Varients",
+        "key": "cardExchangePointsLimit",
+        "options": ["42","46"]
+    },
+    {"type": "bool",
+        "title": "Chicago finishing on a 2 gives 25 points",
+        "section": "Varients",
+        "key": "chicagoTwo"
+    },
+    {"type": "bool",
+        "title": "Destroying a Chicago gives 8 points",
+        "section": "Varients",
+        "key": "chicagoDestroy"
+    },
+    {"type": "bool",
+        "title": "Negative scores, loosing points can take score under zero",
+        "section": "Varients",
+        "key": "negativeScoring"
+    },
+    {"type": "bool",
+        "title": "Take poker score after showdown",
+        "section": "Varients",
+        "key": "pokerAfterShowdownScoring"
+    },
+    {"type": "bool",
+        "title": "Four of a kind sets opponents scores to 0",
+        "section": "Varients",
+        "key": "fourOfaKindReset"
+    },
+    {"type": "bool",
+        "title": "Allow players to view all discarded cards during showdown",
+        "section": "Varients",
+        "key": "viewDiscards"
+    },
+    {
+        "type": "title",
+        "title": "Players (takes effect next new game, 7 chars or less)"
+    },
+    {"type": "string",
+        "title": "Player1",
+        "section": "Players",
+        "key": "Player1"
+    },
+    {"type": "bool",
+        "title": "Player1 CPU",
+        "section": "Players",
+        "key": "p1CPU"
+    },
+    {"type": "string",
+        "title": "Player2",
+        "section": "Players",
+        "key": "Player2"
+    },
+    {"type": "bool",
+        "title": "Player2 CPU",
+        "section": "Players",
+        "key": "p2CPU"
+    },
+    {"type": "string",
+        "title": "Player3",
+        "section": "Players",
+        "key": "Player3"
+    },
+    {"type": "bool",
+        "title": "Player3 CPU",
+        "section": "Players",
+        "key": "p3CPU"
+    },
+    {"type": "string",
+        "title": "Player4",
+        "section": "Players",
+        "key": "Player4"
+    },
+    {"type": "bool",
+        "title": "Player4 CPU",
+        "section": "Players",
+        "key": "p4CPU"
+    }
+]

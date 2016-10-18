@@ -1,0 +1,30 @@
+[size=TITLESIZE][b][color=000000] Tutorial - Poker Scoring:[/color][/b][/size][size=NORMALSIZE]
+
+Now the best Poker hand is selected and scored, by default the following points are awarded:
+
+    one pair                  1
+    two pairs                 2
+    trips (three of a kind)   3
+    straight                  4
+    flush                     5
+    full house                6
+    four of a kind            7
+    straight flush            8
+    royal straight flush     52
+
+... to check the scores at any time touch the green shaded box at the top right. To retract the box simply tap it again.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[/size]

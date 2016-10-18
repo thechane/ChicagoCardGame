@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+  <particleEmitterConfig>
+  <texture name="straightflush.png"/>
+  <sourcePosition x="300.00" y="300.00"/>
+  <sourcePositionVariance x="104.41" y="0"/>
+  <gravity x="0" y="0"/>
+  <emitterType value="1"/>
+  <maxParticles value="250"/>
+  <particleLifeSpan value="2"/>
+  <particleLifespanVariance value="1.9"/>
+  <startParticleSize value="70"/>
+  <startParticleSizeVariance value="49.53"/>
+  <finishParticleSize value="10"/>
+  <FinishParticleSizeVariance value="0"/>
+  <angle value="270.37"/>
+  <angleVariance value="15.0"/>
+  <rotationStart value="0"/>
+  <rotationStartVariance value="0"/>
+  <rotationEnd value="0"/>
+  <rotationEndVariance value="0"/>
+  <speed value="90"/>
+  <speedVariance value="30"/>
+  <radialAcceleration value="0"/>
+  <radialAccelVariance value="0"/>
+  <tangentialAcceleration value="0"/>
+  <tangentialAccelVariance value="0"/>
+  <maxRadius value="144"/>
+  <maxRadiusVariance value="76"/>
+  <minRadius value="136"/>
+  <rotatePerSecond value="12.0"/>
+  <rotatePerSecondVariance value="128"/>
+  <startColor alpha="0.62" blue="0" green="0.31" red="1"/>
+  <startColorVariance alpha="0" blue="0" green="0" red="0"/>
+  <finishColor alpha="0" blue="0" green="0.31" red="1"/>
+  <finishColorVariance alpha="0" blue="0" green="0" red="0"/>
+  <blendFuncSource value="770"/>
+  <blendFuncDestination value="1"/>
+  </particleEmitterConfig>

@@ -1,0 +1,1323 @@
+<Shop_Screen>:
+    name: 'shopScreen'
+    CustomLayout:
+        id: shopFullScreen
+        Image:
+            source: './images/greenTable.jpg'
+            allow_stretch: True
+            keep_ratio: False
+	BoxLayout:
+		id: outerShopBL
+	    orientation: 'vertical'
+	    Label:
+	        size_hint: 1, 0.2
+	    Label:
+	        id: shopHeading
+	        text: "Chicago Shop"
+	        size_hint: 1, 0.05
+	        font_name: './fonts/BrokenGlass.ttf'
+	        font_size: self.width * 0.08
+	    Label:
+	        size_hint: 1, 0.2
+	    BoxLayout:
+	    	orientation: 'horizontal'
+	    	Label:
+	        	size_hint: 0.02, 1
+		    GridLayout:
+		    	size_hint: 0.8, 1
+		    	id: innerShopGL
+		    	cols: 3
+	    	Label:
+	        	size_hint: 0.02, 1
+	    BoxLayout:
+	        orientation: 'horizontal'
+	        Label:
+	            size_hint: 0.4, 0.3
+	        Button:
+	            id: shopCloseButton
+	            text: 'Back'
+	            size_hint: 0.2, 0.2
+	            on_press: root.manager.current = 'menuScreen'
+	        Label:
+	            size_hint: 0.4, 0.3
+	    Label:
+	        size_hint: 1, 0.2
+<Game_Over_Screen>:
+    name: 'gameOverScreen'
+    on_enter: root.Game_OverScreen_Load()
+    CustomLayout:
+        id: gameOverFullScreen
+        Image:
+            source: './images/greenTable.jpg'
+            allow_stretch: True
+            keep_ratio: False
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            size_hint: 1, 0.075
+        Label:
+            id: prettyHeading
+            size_hint: 1, 0.11
+            font_name: './fonts/BrokenGlass.ttf'
+            font_size: self.width * 0.09
+        BoxLayout:
+            size_hint: 1, 1
+            orientation: 'horizontal'
+            Label:
+                size_hint: 0.05, 1
+            ScrollView:
+                bar_width: 6
+                bar_color: 0.03, 0.2, 0.2, 0.9
+                bar_inactive_color: 0.05, 0.3, 0.3, 0.8
+                Label:
+                    id: prettyLabel
+                    markup: True
+                    text_size: self.width, None  # Set the text wrap box width
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    padding_x: 8
+                    canvas.after:
+                        Color:
+                            rgba: 0, 0.5, 0, 0.35
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+            Label:
+                size_hint: 0.05, 1
+        BoxLayout:
+            size_hint: 1, 0.1
+            orientation: 'horizontal'
+            Label:
+                size_hint: 0.4, 1
+            Button:
+                id: closePrettyButton
+                text: 'OK'
+                size_hint: 0.1, 1
+                #disabled: True
+                #background_color: 0,0,0,0
+                on_press: root.manager.current = 'menuScreen'
+            Label:
+                size_hint: 0.4, 1
+        Label:
+            size_hint: 1, 0.1
+
+<Menu_Screen>:
+    name: 'menuScreen'
+    on_enter: root.MenuScreen_Checks()
+    BoxLayout:
+        id: largeMenuBoxLayout
+        orientation: 'vertical'
+        on_size: root.MenuScreen_Checks()
+        Label:
+        	size_hint: 1, 0.1
+        Label:
+            size_hint: 1, 0.2
+            id: t1lab
+            font_name: './fonts/BrokenGlass.ttf'
+            text: "C H I C A G O"
+            font_size: self.width * 0.16
+        Label:
+            size_hint: 1, 0.05
+            id: tspacer
+		BoxLayout:
+        	orientation: 'horizontal'
+        	size_hint: 1, 0.05
+			Image:
+            	allow_stretch: True
+            	keep_ratio: True
+            	source: './images/kivy.png'
+            	size_hint: 0.2, 1
+        	Label:
+	            size_hint: 1, 0.05
+	            id: t2lab
+	            font_name: './fonts/Hack-RegularOblique.ttf'
+	            text: "... a whisty poker variant from Sweden"
+	            font_size: self.width * 0.025
+			Image:
+            	allow_stretch: True
+            	keep_ratio: True
+            	source: './images/kivy.png'
+            	size_hint: 0.2, 1
+        Image:
+            size_hint: 1, 0.8
+            pos: 0, 0
+            allow_stretch: True
+            keep_ratio: False
+            source: './images/skyline.png'
+            #canvas:
+            #    Color:
+            #        rgba: 1, 1, 0, 0.5
+            #    Rectangle:
+            #        pos: self.pos
+            #        size: self.size
+        BoxLayout:
+            id: menuScroller
+            orientation: 'horizontal'
+            size_hint: 1, 0.2
+            Button:
+                id: returnToGameButton
+                font_size: self.width * 0.17
+                text: 'Continue'
+                disabled: True
+                on_press: root.Return_to_Game()
+                #canvas:
+                #    Color:
+                #        rgba: 0, 1, 1, 0.5
+                #    Rectangle:
+                #        pos: self.pos
+                #        size: self.size
+            Button:
+                text: 'New Game'
+                font_size: self.width * 0.17
+                #on_release: app.root.New_Game()
+                on_release: root.Are_You_Sure()
+            Button:
+                text: 'Settings'
+                font_size: self.width * 0.17
+                on_press: app.get_running_app().open_settings()
+            Button:
+            	id: shopButton
+                text: 'Shop'
+                font_size: self.width * 0.17
+                on_press: root.manager.current = 'shopScreen'
+                #on_press: root.Show_Shop()
+            Button:
+            	id: aboutButton
+                text: 'About'
+                font_size: self.width * 0.17
+                on_press: root.Show_About()
+	BoxLayout:
+        orientation: 'vertical'
+        Label:
+        	size_hint: 1, 0.2
+        BoxLayout:
+        	id: aboutLO
+            size_hint: 1, 1
+            orientation: 'horizontal'
+            Label:
+            	id: aboutLabelPadding
+            	size_hint: 0.1, 1
+            ScrollView:
+            	id: scrollViewID
+            	bar_width: 6
+            	bar_color: 0.03, 0.2, 0.2, 0.9
+            	bar_inactive_color: 0.05, 0.3, 0.3, 0.9
+	            Label:
+	                id: aboutLabel
+	                markup: True
+	                text_size: self.width, None  # Set the text wrap box width
+        			size_hint_y: None
+        			height: self.texture_size[1]
+        			padding_x: 8
+	                canvas.before:
+	                    Color:
+	                        rgba: 0.122, 0.5, 0.5, 0.9
+	                    Rectangle:
+	                        pos: self.pos
+	                        size: self.size
+            Label:
+            	id: aboutLabelPadding2
+            	size_hint: 0.1, 1
+        BoxLayout:
+        	id: aboutLO2
+            size_hint: 1, 0.1
+            orientation: 'horizontal'
+            Label:
+            	id: closeAboutButtonPadding
+            	size_hint: 0.4, 1
+            Button:
+            	id: closeAboutButton
+            	text: 'OK'
+            	size_hint: 0.1, 1
+            	#disabled: True
+            	#background_color: 0,0,0,0
+            	on_press: root.Hide_About()
+            Label:
+            	id: closeAboutButtonPadding2
+            	size_hint: 0.4, 1
+        Label:
+        	size_hint: 1, 0.2
+
+<Game_Screen>:
+    name: 'gameScreen'
+    #on_enter: root.Screen_Size_Calcs()
+    CustomLayout:
+        Image:
+        	id: backGroundImage
+            source: './images/simpleTable.jpg'
+            allow_stretch: True
+            keep_ratio: False
+    BoxLayout:
+        orientation: 'vertical'
+        FloatLayout:
+            id: infoFloat
+            size_hint_y: 0.35
+            #on_size: root.Main_Float_Resize()
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 1, 0.3
+                #Rectangle:
+                #    pos: self.pos
+                #    size: self.size
+                Line:
+                    id:p1
+                    circle: self.center_x + root.circleXoffset, self.center_y + self.height * root.circleScale - root.circleYoffset, self.height * root.circleScale, 90, 180
+                Line:
+                    id:p2
+                    circle: self.center_x + root.circleXoffset, self.center_y + self.height * root.circleScale - root.circleYoffset, self.height * root.circleScale, 180, 270
+                Line:
+                    id:p3
+                    circle: self.center_x + root.circleXoffset, self.center_y + self.height * root.circleScale - root.circleYoffset, self.height * root.circleScale, 270, 360
+                Line:
+                    id:p4
+                    circle: self.center_x + root.circleXoffset, self.center_y + self.height * root.circleScale - root.circleYoffset, self.height * root.circleScale, 0, 90
+                Line:
+                    points: self.center_x + root.circleXoffset - self.height * root.circleScale, self.center_y + self.height * root.circleScale - root.circleYoffset, self.center_x + root.circleXoffset + self.height * root.circleScale, self.center_y  + self.height * root.circleScale - root.circleYoffset
+                    width: 1
+                Line:
+                    points: self.center_x + root.circleXoffset, self.center_y + (self.height * (root.circleScale * 2)) - root.circleYoffset, self.center_x + root.circleXoffset, self.center_y - root.circleYoffset
+                    width: 1
+            Image:
+                id: tableImage
+                size_hint: 0.5, 0.55
+                allow_stretch: True
+                keep_ratio: False
+                #width: self.texture_size[0]
+                #height: self.texture_size[1]
+                pos: infoFloat.center_x + root.circleXoffset - (self.width / 2.025), infoFloat.center_y + (infoFloat.height * root.circleScale) - root.circleYoffset - self.height / 2
+                source: './images/table.png'
+            Label:
+                id: dealerLabel
+                #size_hint: 0.045, 0.045
+                size_hint: None, None
+                size: infoFloat.height * root.circleScale / 13, infoFloat.height * root.circleScale / 13
+                pos: infoFloat.center_x - (infoFloat.height * root.circleScale / 6) + root.circleXoffset, infoFloat.center_y + (infoFloat.height * root.circleScale) - root.circleYoffset + (infoFloat.height * root.circleScale / 6)
+                canvas.before:
+                    Color:
+                        rgba: 1, 1, 0, 1
+                    Line:
+                        circle: self.center_x, self.center_y, self.width * 0.2, 0, 360
+                        width: self.width
+                canvas.after:
+                    Color:
+                        rgba: 0, 0.2, 0.8, 1
+                    Line:
+                        circle: self.center_x, self.center_y, self.width, 0, 360
+                        width: self.width * 0.2
+
+            Label:
+                id: p1nameLabel
+                bold: True
+                size_hint: None, None
+                #size: infoFloat.height * root.circleScale, infoFloat.height  * 0.05
+                font_name: './fonts/Hack-Bold.ttf'
+                text: ''
+                font_size: '10sp'
+                font_name: './fonts/Hack-Bold.ttf'
+                width: self.texture_size[0]
+                height: self.texture_size[1]
+                pos: infoFloat.center_x + root.circleXoffset - (self.width / 2) + (infoFloat.height * root.circleScale * 0.8), infoFloat.center_y + (infoFloat.height * root.circleScale * 1.8) - root.circleYoffset - self.height / 2
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 315
+                        origin: self.center
+                canvas.after:
+                    Color:
+                        rgba: 0.1, 0.5, 0.1, 0
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                    PopMatrix
+            Label:
+                id: p2nameLabel
+                size_hint: None, None
+                #size: infoFloat.height * root.circleScale, infoFloat.height  * 0.05
+                font_name: './fonts/Hack-Bold.ttf'
+                text: ''
+                font_size: '10sp'
+                font_name: './fonts/Hack-Bold.ttf'
+                width: self.texture_size[0]
+                height: self.texture_size[1]
+                pos: infoFloat.center_x + root.circleXoffset - (self.width / 2) + (infoFloat.height * root.circleScale * 0.8), infoFloat.center_y + (infoFloat.height * root.circleScale * 0.3) - root.circleYoffset - self.height / 2
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 45
+                        origin: self.center
+                canvas.after:
+                    Color:
+                        rgba: 0.1, 0.5, 0.1, 0
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                    PopMatrix
+            Label:
+                id: p3nameLabel
+                size_hint: None, None
+                #size: infoFloat.height * root.circleScale, infoFloat.height  * 0.05
+                font_name: './fonts/Hack-Bold.ttf'
+                text: ''
+                font_size: '10sp'
+                font_name: './fonts/Hack-Bold.ttf'
+                width: self.texture_size[0]
+                height: self.texture_size[1]
+                #pos: infoFloat.width + 10, infoFloat.height + 10
+                #pos: infoFloat.center_x + root.circleXoffset - infoFloat.height * 0.25, infoFloat.center_y + infoFloat.height * 0.04 - root.circleYoffset
+                pos: infoFloat.center_x + root.circleXoffset - (self.width / 2) - (infoFloat.height * root.circleScale * 0.8), infoFloat.center_y + (infoFloat.height * root.circleScale * 0.2) - root.circleYoffset - self.height / 2
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 315
+                        origin: self.center
+                canvas.after:
+                    Color:
+                        rgba: 0.1, 0.5, 0.1, 0
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                    PopMatrix
+            Label:
+                id: p4nameLabel
+                size_hint: None, None
+                #size: infoFloat.height * root.circleScale, infoFloat.height  * 0.05
+                font_name: './fonts/Hack-Bold.ttf'
+                text: ''
+                font_size: '10sp'
+                font_name: './fonts/Hack-Bold.ttf'
+                width: self.texture_size[0]
+                height: self.texture_size[1]
+                pos: infoFloat.center_x + root.circleXoffset - (self.width / 2) - (infoFloat.height * root.circleScale * 0.8), infoFloat.center_y + (infoFloat.height * root.circleScale * 1.8) - root.circleYoffset - self.height / 2
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 45
+                        origin: self.center
+                canvas.after:
+                    Color:
+                        rgba: 0.1, 0.5, 0.1, 0
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                    PopMatrix
+
+            Image:
+                id: p1c0Image
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: card0.width * 0.12, card0.height * 0.12
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 315
+                        origin: self.center
+					Color:
+                        rgba: 0.39, 0, 0, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                canvas.after:
+                    PopMatrix
+            Image:
+                id: p1c1Image
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: card0.width * 0.12, card0.height * 0.12
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 315
+                        origin: self.center
+					Color:
+                        rgba: 0.39, 0, 0, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                canvas.after:
+                    PopMatrix
+            Image:
+                id: p1c2Image
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: card0.width * 0.12, card0.height * 0.12
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 315
+                        origin: self.center
+					Color:
+                        rgba: 0.39, 0, 0, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                canvas.after:
+                    PopMatrix
+            Image:
+                id: p1c3Image
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: card0.width * 0.12, card0.height * 0.12
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 315
+                        origin: self.center
+					Color:
+                        rgba: 0.39, 0, 0, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                canvas.after:
+                    PopMatrix
+            Image:
+                id: p1c4Image
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: card0.width * 0.12, card0.height * 0.12
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 315
+                        origin: self.center
+                    Color:
+                        rgba: 0.39, 0, 0, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                canvas.after:
+                    PopMatrix
+            Image:
+                id: p2c0Image
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: card0.width * 0.12, card0.height * 0.12
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 45
+                        origin: self.center
+                    Color:
+                        rgba: 0.39, 0, 0, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                canvas.after:
+                    PopMatrix
+            Image:
+                id: p2c1Image
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: card0.width * 0.12, card0.height * 0.12
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 45
+                        origin: self.center
+					Color:
+                        rgba: 0.39, 0, 0, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                canvas.after:
+                    PopMatrix
+            Image:
+                id: p2c2Image
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: card0.width * 0.12, card0.height * 0.12
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 45
+                        origin: self.center
+					Color:
+                        rgba: 0.39, 0, 0, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                canvas.after:
+                    PopMatrix
+            Image:
+                id: p2c3Image
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: card0.width * 0.12, card0.height * 0.12
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 45
+                        origin: self.center
+					Color:
+                        rgba: 0.39, 0, 0, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                canvas.after:
+                    PopMatrix
+            Image:
+                id: p2c4Image
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: card0.width * 0.12, card0.height * 0.12
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 45
+                        origin: self.center
+					Color:
+                        rgba: 0.39, 0, 0, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                canvas.after:
+                    PopMatrix
+            Image:
+                id: p3c0Image
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: card0.width * 0.12, card0.height * 0.12
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 315
+                        origin: self.center
+					Color:
+                        rgba: 0.39, 0, 0, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                canvas.after:
+                    PopMatrix
+            Image:
+                id: p3c1Image
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: card0.width * 0.12, card0.height * 0.12
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 315
+                        origin: self.center
+					Color:
+                        rgba: 0.39, 0, 0, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                canvas.after:
+                    PopMatrix
+            Image:
+                id: p3c2Image
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: card0.width * 0.12, card0.height * 0.12
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 315
+                        origin: self.center
+					Color:
+                        rgba: 0.39, 0, 0, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                canvas.after:
+                    PopMatrix
+            Image:
+                id: p3c3Image
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: card0.width * 0.12, card0.height * 0.12
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 315
+                        origin: self.center
+					Color:
+                        rgba: 0.39, 0, 0, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                canvas.after:
+                    PopMatrix
+            Image:
+                id: p3c4Image
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: card0.width * 0.12, card0.height * 0.12
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 315
+                        origin: self.center
+					Color:
+                        rgba: 0.39, 0, 0, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                canvas.after:
+                    PopMatrix
+            Image:
+                id: p4c0Image
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: card0.width * 0.12, card0.height * 0.12
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 45
+                        origin: self.center
+					Color:
+                        rgba: 0.39, 0, 0, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                canvas.after:
+                    PopMatrix
+            Image:
+                id: p4c1Image
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: card0.width * 0.12, card0.height * 0.12
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 45
+                        origin: self.center
+					Color:
+                        rgba: 0.39, 0, 0, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                canvas.after:
+                    PopMatrix
+            Image:
+                id: p4c2Image
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: card0.width * 0.12, card0.height * 0.12
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 45
+                        origin: self.center
+					Color:
+                        rgba: 0.39, 0, 0, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                canvas.after:
+                    PopMatrix
+            Image:
+                id: p4c3Image
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: card0.width * 0.12, card0.height * 0.12
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 45
+                        origin: self.center
+					Color:
+                        rgba: 0.39, 0, 0, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                canvas.after:
+                    PopMatrix
+            Image:
+                id: p4c4Image
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: card0.width * 0.12, card0.height * 0.12
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+                canvas.before:
+                    PushMatrix
+                    Rotate:
+                        axis: 0,0,1
+                        angle: 45
+                        origin: self.center
+					Color:
+                        rgba: 0.39, 0, 0, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                canvas.after:
+                    PopMatrix
+            Image:
+                id: p1c0DiscardImage
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: infoFloat.height * 0.12, infoFloat.height  * 0.18
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                id: p1c1DiscardImage
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: infoFloat.height * 0.12, infoFloat.height  * 0.18
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                id: p1c2DiscardImage
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: infoFloat.height * 0.12, infoFloat.height  * 0.18
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                id: p1c3DiscardImage
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: infoFloat.height * 0.12, infoFloat.height  * 0.18
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                id: p1c4DiscardImage
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: infoFloat.height * 0.12, infoFloat.height  * 0.18
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                id: p2c0DiscardImage
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: infoFloat.height * 0.12, infoFloat.height  * 0.18
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                id: p2c1DiscardImage
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: infoFloat.height * 0.12, infoFloat.height  * 0.18
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                id: p2c2DiscardImage
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: infoFloat.height * 0.12, infoFloat.height  * 0.18
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                id: p2c3DiscardImage
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: infoFloat.height * 0.12, infoFloat.height  * 0.18
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                id: p2c4DiscardImage
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: infoFloat.height * 0.12, infoFloat.height  * 0.18
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                id: p3c0DiscardImage
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: infoFloat.height * 0.12, infoFloat.height  * 0.18
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                id: p3c1DiscardImage
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: infoFloat.height * 0.12, infoFloat.height  * 0.18
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                id: p3c2DiscardImage
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: infoFloat.height * 0.12, infoFloat.height  * 0.18
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                id: p3c3DiscardImage
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: infoFloat.height * 0.12, infoFloat.height  * 0.18
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                id: p3c4DiscardImage
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: infoFloat.height * 0.12, infoFloat.height  * 0.18
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                id: p4c0DiscardImage
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: infoFloat.height * 0.12, infoFloat.height  * 0.18
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                id: p4c1DiscardImage
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: infoFloat.height * 0.12, infoFloat.height  * 0.18
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                id: p4c2DiscardImage
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: infoFloat.height * 0.12, infoFloat.height  * 0.18
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                id: p4c3DiscardImage
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: infoFloat.height * 0.12, infoFloat.height  * 0.18
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                id: p4c4DiscardImage
+                pos: infoFloat.width + self.width, infoFloat.height + self.height
+                size_hint: None, None
+                size: infoFloat.height * 0.12, infoFloat.height  * 0.18
+                source: './images/back/simpleback_small.png'
+                allow_stretch: True
+                keep_ratio: False
+        FloatLayout:
+            ##padding between infoFloat and mainFloat
+            size_hint_y: 0.1
+    ##Have to float the topBoxLayout here so Score text sits on top of graphics, but not scatters
+    FloatLayout:
+        BoxLayout:
+            orientation: 'horizontal'
+            id: topBoxLayout
+            size_hint_y: 0.06
+            pos: 0, root.height - self.height
+            width: root.width
+            Button:
+                id: endTurnButton
+                font_size: '20sp'
+                size_hint_x: 0.35
+                text: 'End Turn'
+                on_press: root.End_Turn()
+                disabled: True
+            Label:
+                id: infoLabel
+                font_size: '22sp'
+                #font_name: './fonts/Hack-Regular.ttf'
+                size_hint_x: 0.65
+                #size_hint_y: (1 - self.parent.size_hint_y) * 5
+                size_hint_y: None
+                #width: self.parent.width * 0.65
+                height: self.texture_size[1] - dp(3)
+                text_size: self.size[0], None
+                halign: 'left'
+                valign: 'bottom'
+                text: root.infoText
+                markup: True
+                canvas.before:
+                    Color:
+                        rgba: 1, 1, 0, 0.2
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        BoxLayout:
+        	id: topBoxLayout2
+            orientation: 'horizontal'
+            size_hint_y: 0.062
+            pos: root.width, root.height - self.height
+            width: root.width * 0.65
+    		Label:
+    			id: infoLabel2
+    			size_hint_x: 0.2
+                canvas.after:
+                    Color:
+                        rgba: 1, 1, 0, 0.2
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        	Button:
+                id: menuButton
+                font_size: '20sp'
+                size_hint_x: 0.35
+                text: 'menu'
+                valign: 'middle'
+                on_press: root.manager.current = 'menuScreen'
+            Button:
+	            id: helpButton
+	            font_size: '20sp'
+	            size_hint_x: 0.35
+                text: 'help'
+                valign: 'middle'
+                on_press: root.Show_Tutorial()
+    		Label:
+    			id: infoLabel3
+    			size_hint_x: 0.55
+                canvas.after:
+                    Color:
+                        rgba: 1, 1, 0, 0.2
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+        FloatLayout:
+            id: mainFloat
+            #canvas.after:
+            #    Color:
+            #        rgba: 1, 0, 0, 0.4
+            #    Rectangle:
+            #        pos: self.pos
+            #        size: self.size
+            Label:
+                id: flashLabel
+                text: root.flashText
+                font_size: '18sp'
+                font_name: './fonts/Hack-Regular.ttf'
+                size_hint: None, None
+                width: self.texture_size[0] + dp(10)
+                height: self.texture_size[1] + dp(10)
+                pos: mainFloat.width, mainFloat.height - mainFloat.height * 0.15
+                canvas.before:
+                    Color:
+                        rgba: 0.2, 0.2, 0.2, 0.9
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            Button:
+                id: yesChicagoButton
+                font_name: './fonts/BrokenGlass.ttf'
+                size_hint: 0.5, 0.13
+                height: endTurnButton.height
+                text_size: None, None
+                font_size: '38sp'
+                pos: 0 - yesChicagoButton.width, root.height - self.height
+                valign: 'middle'
+                text: "CICAGO"
+                disabled: True
+                #on_press: root.Display_Chicago_Buttons.yes_button_callback()
+            Button:
+                id: noChicagoButton
+                font_name: './fonts/Hack-Bold.ttf'
+                size_hint: 0.5, 0.13
+                size: yesChicagoButton.size
+                text_size: None, None
+                font_size: '20sp'
+                pos: root.width + noChicagoButton.width, root.height - self.height
+                valign: 'middle'
+                text: "NO CICAGO"
+                disabled: True
+                #on_press: root.Display_Chicago_Buttons.no_button_callback()
+            Label:
+                id: showDownLabel
+                size_hint: root.xCardVector + 0.15, root.yCardVector + 0.15
+                pos: root.center_x - (self.width * 0.5) - root.circleXoffset, root.center_y - (self.height * 0.75) + root.showdownDropYoffset
+                canvas.after:
+                    Color:
+                        rgba: 0, 0.5, 0, 0.25
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            Image:
+                id: activeCardImage
+                size_hint: root.xCardVector, root.yCardVector
+                allow_stretch: True
+                keep_ratio: False
+                pos: showDownLabel.pos[0] + (showDownLabel.width / 2) - (card0.width / 2), showDownLabel.pos[1] + (showDownLabel.height / 2) - (card0.height / 2)
+                color: 0,0,0,0
+            Scatter:
+                id: card0
+                size_hint: root.xCardVector, root.yCardVector
+                pos: root.center_x - (root.width * 0.15 / 2) + 1 * 20, 0 - card0.size[1] * 2
+                do_scale: False
+                do_rotation: False
+                #canvas.after:
+                #    Color:
+                #        rgba: 0, 0.5, 0, 0.6
+                #    Rectangle:
+                #        pos: self.pos
+                #        size: self.size
+                Image:
+                    id: card0Image
+                    mipmap: True
+                    pos_hint: None, None
+                    size: card0.size
+                    source: './images/back/simpleback.png'
+                    allow_stretch: True
+                    keep_ratio: False
+                    anim_loop: 1
+#                     canvas.after:
+#                     	BorderImage:
+#                     		source: './images/cardborder.png'
+#                     		size: card0Image.width, card0Image.height
+#                     		pos: card0Image.x, card0Image.y
+# 					canvas.before:
+                    	#Color:
+	                    #    rgba: 0.39, 0, 0, 1
+	                    #Rectangle:
+	                    #    pos: self.pos
+	                    #    size: self.size
+            Scatter:
+                id: card1
+                size_hint: root.xCardVector, root.yCardVector
+                pos: root.center_x - (root.width * 0.15 / 2) + 2 * 20, 0 - card0.size[1] * 2
+                do_scale: False
+                do_rotation: False
+                Image:
+                    id: card1Image
+                    mipmap: True
+                    pos_hint: None, None
+                    size: card0.size
+                    source: './images/back/simpleback.png'
+                    allow_stretch: True
+                    keep_ratio: False
+                    anim_loop: 1
+#                     canvas.after:
+#                     	BorderImage:
+#                     		source: './images/cardborder.png'
+#                     		size: card0Image.width, card0Image.height
+#                     		pos: card0Image.x, card0Image.y
+# 					canvas.before:
+                    	#Color:
+	                    #    rgba: 0.39, 0, 0, 1
+	                    #Rectangle:
+	                    #    pos: self.pos
+	                    #    size: self.size
+            Scatter:
+                id: card2
+                size_hint: root.xCardVector, root.yCardVector
+                pos: root.center_x - (root.width * 0.15 / 2) + 3 * 20, 0 - card0.size[1] * 2
+                do_scale: False
+                do_rotation: False
+                Image:
+                    id: card2Image
+                    mipmap: True
+                    pos_hint: None, None
+                    size: card0.size
+                    source: './images/back/simpleback.png'
+                    allow_stretch: True
+                    keep_ratio: False
+                    anim_loop: 1
+#                     canvas.after:
+#                     	BorderImage:
+#                     		source: './images/cardborder.png'
+#                     		size: card0Image.width, card0Image.height
+#                     		pos: card0Image.x, card0Image.y
+# 					canvas.before:
+                    	#Color:
+	                    #    rgba: 0.39, 0, 0, 1
+	                    #Rectangle:
+	                    #    pos: self.pos
+	                    #    size: self.size
+            Scatter:
+                id: card3
+                size_hint: root.xCardVector, root.yCardVector
+                pos: root.center_x - (root.width * 0.15 / 2) + 4 * 20, 0 - card0.size[1] * 2
+                do_scale: False
+                do_rotation: False
+                Image:
+                    id: card3Image
+                    mipmap: True
+                    pos_hint: None, None
+                    size: card0.size
+                    source: './images/back/simpleback.png'
+                    allow_stretch: True
+                    keep_ratio: False
+                    anim_loop: 1
+#                     canvas.after:
+#                     	BorderImage:
+#                     		source: './images/cardborder.png'
+#                     		size: card0Image.width, card0Image.height
+#                     		pos: card0Image.x, card0Image.y
+# 					canvas.before:
+                    	#Color:
+	                    #    rgba: 0.39, 0, 0, 1
+	                    #Rectangle:
+	                    #    pos: self.pos
+	                    #    size: self.size
+            Scatter:
+                id: card4
+                size_hint: root.xCardVector, root.yCardVector
+                pos: root.center_x - (root.width * 0.15 / 2) + 5 * 20, 0 - card0.size[1] * 2
+                do_scale: False
+                do_rotation: False
+                Image:
+                    id: card4Image
+                    mipmap: True
+                    pos_hint: None, None
+                    size: card0.size
+                    source: './images/back/simpleback.png'
+                    allow_stretch: True
+                    keep_ratio: False
+                    anim_loop: 1
+#                     canvas.after:
+#                     	BorderImage:
+#                     		source: './images/cardborder.png'
+#                     		size: card0Image.width, card0Image.height
+#                     		pos: card0Image.x, card0Image.y
+# 					canvas.before:
+                    	#Color:
+	                    #    rgba: 0.39, 0, 0, 1
+	                    #Rectangle:
+	                    #    pos: self.pos
+	                    #    size: self.size
+            Label:
+                id: pokerDiscardLabel
+                size_hint: None, None
+                size: root.width, card0.size[1] * 0.5
+                pos: 0, 0
+                canvas.before:
+                    Color:
+                        rgba: 0, 0.5, 0, 0.35
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+	BoxLayout:
+        orientation: 'vertical'
+        Label:
+        	size_hint: 1, 0.2
+        BoxLayout:
+        	id: tutorialLO
+            size_hint: 1, 0.5
+            orientation: 'horizontal'
+            Label:
+            	id: tutorialLabelPadding
+            	size_hint: 0.1, 1
+            ScrollView:
+            	id: svID
+            	bar_width: 6
+            	bar_color: 0.03, 0.2, 0.2, 0.9
+            	bar_inactive_color: 0.05, 0.3, 0.3, 0.9
+	            Label:
+	                id: tutorialLabel
+	                markup: True
+	                text_size: self.width, None  # Set the text wrap box width
+        			size_hint_y: None
+        			height: self.texture_size[1]
+        			padding_x: 8
+	                canvas.before:
+	                    Color:
+	                        rgba: 0.122, 0.5, 0.5, 0.9
+	                    Rectangle:
+	                        pos: self.pos
+	                        size: self.size
+            Label:
+            	id: tutorialLabelPadding2
+            	size_hint: 0.1, 1
+        BoxLayout:
+        	id: tutorialLO2
+            size_hint: 1, 0.1
+            orientation: 'horizontal'
+            Label:
+            	id: closeTutorialButtonPadding
+            	size_hint: 0.4, 1
+            Button:
+            	id: closeTutorialButton
+            	text: 'OK'
+            	size_hint: 0.1, 1
+            	on_press: root.Hide_Tutorial()
+            Label:
+            	id: closeTutorialButtonPadding2
+            	size_hint: 0.4, 1
+        Label:
+        	size_hint: 1, 0.2

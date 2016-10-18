@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+  <particleEmitterConfig>
+  <texture name="royal.png"/>
+  <sourcePosition x="300.00" y="300.00"/>
+  <sourcePositionVariance x="30" y="30"/>
+  <gravity x="0.7" y="1.43"/>
+  <emitterType value="0"/>
+  <maxParticles value="500"/>
+  <particleLifeSpan value="4"/>
+  <particleLifespanVariance value="4"/>
+  <startParticleSize value="50"/>
+  <startParticleSizeVariance value="50"/>
+  <finishParticleSize value="30"/>
+  <FinishParticleSizeVariance value="10"/>
+  <angle value="359"/>
+  <angleVariance value="190"/>
+  <rotationStart value="5786.87373082"/>
+  <rotationStartVariance value="6990.0851006"/>
+  <rotationEnd value="7333.85977767"/>
+  <rotationEndVariance value="7448.4513367"/>
+  <speed value="98"/>
+  <speedVariance value="211"/>
+  <radialAcceleration value="0"/>
+  <radialAccelVariance value="0"/>
+  <tangentialAcceleration value="0"/>
+  <tangentialAccelVariance value="0"/>
+  <maxRadius value="100"/>
+  <maxRadiusVariance value="0"/>
+  <minRadius value="0"/>
+  <rotatePerSecond value="0"/>
+  <rotatePerSecondVariance value="0"/>
+  <startColor alpha="0.76" blue="0.58" green="0.39" red="0.32"/>
+  <startColorVariance alpha="0.08" blue="0.88" green="0.75" red="0.42"/>
+  <finishColor alpha="0.57" blue="0.42" green="0.85" red="0.79"/>
+  <finishColorVariance alpha="0.46" blue="0.26" green="0.51" red="0.45"/>
+  <blendFuncSource value="770"/>
+  <blendFuncDestination value="1"/>
+  </particleEmitterConfig>

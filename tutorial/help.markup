@@ -1,0 +1,53 @@
+[size=TITLESIZE][b][color=00F600] Confused?? Go to the settings menu and enable the tutorial![/color][/b]
+
+[size=TITLESIZE][b][color=000000] Game Hint:[/color][/b]
+GAMEHINTTXT
+
+[size=TITLESIZE][b][color=000000] Scoring:[/color][/b]
+One pair: 1
+Two pair: 2
+Three of a kind: 3
+Straight: 4
+Flush: 5
+Full House: 6
+Four of a kind: 7
+Straight flush: 8, 10 or 52
+(depending on settings)
+
+Winning a showdown: 5
+
+Winning a Chicago showdown: 15 points or 25 points if enabled in the settings and showdown ends on a 2.
+
+Loosing a Chicago: -15
+
+Destroying another players Chicago: 8
+(if option is enabled in the settings)
+
+[b][color=000000] How to win:[/color][/b]
+ Simple - score 52 or more points
+[/color]
+[b][color=000000] Basic gameplay:[/color][/b]
+Chicago is played with a standard 52-card deck. Each player is dealt five cards. The objective is to reach 52 points.
+
+--Exchanges and poker hand scoring--
+
+The players are allowed to exchange any number of their cards during the initial rounds to try and build a strong hand.
+After the exchange rounds, a single player with the best hand gets points for according to the chart shown above.
+Then follows another round of exchanges, but no scoring.
+!** Note - If a player has over 42 or 46 points (depending on settings) they are no longer permitted to exchange cards. **!
+
+--The Showdown--
+
+The first player begins by playing one card, Ordinary Whist rules apply but the cards are discarded into piles separated by player rather than one big pile.
+The player who wins the last trick gets 5 points and the player with the best hand gets points for his hand (can be the same player).
+
+--Chicago--
+
+After the final exchange round, any player can choose to play a "Chicago" during the showdown. This player then pledges themselves to win [b]ALL[/b] the tricks in that showdown.
+If successful the player is awarded 15 points or 25 when ending with a 2 (25 points on 2 can be turned off in the settings). If a player calls Chicago but fails to win all tricks, the penalty is a harsh -15 points.
+
+
+[b][color=000000] Still need help??[/color][/b]
+Please hit the [color=0000ff][ref=https://www.facebook.com/ChicagoCardGame]FaceBook page[/ref][/color] and check out the guides or give the community a shout out.
+[/color]
+[/size]
