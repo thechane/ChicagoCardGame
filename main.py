@@ -1,8 +1,8 @@
 import io
-from __builtin__ import int
+from builtins import int
 from os import listdir, remove, environ, rename
 from os.path import isfile
-import cPickle
+import _pickle as cPickle
 from traceback import format_exc, print_exc
 
 import kivy
@@ -26,32 +26,32 @@ from kivy.properties import StringProperty, ObjectProperty
 
 from plyer import email
 
-__version__ = "1.2"
-paidApp = False
+__version__ = "2.0"
+paidApp = True
 try:
     if environ['FREE'] == "0":
         paidApp = True
-except Exception,e:
+except Exception as e:
     Logger.info('Unable to query ENV var FREE: ' + str(e))
 
-if platform == 'android':
-    ##Billing
-    from jnius import autoclass
-    import oiabilling
-    ##Advertising
-    PythonActivity = autoclass("org.renpy.android.PythonActivity")
-    AdBuddiz = autoclass("com.purplebrain.adbuddiz.sdk.AdBuddiz")
-elif platform == 'ios' and paidApp is False:
-    from pyobjus import autoclass
-    from pyobjus.dylib_manager import load_framework, INCLUDE,  make_dylib, load_dylib
-    load_framework(INCLUDE.StoreKit)
-    load_framework(INCLUDE.AVFoundation)
-    load_framework(INCLUDE.SystemConfiguration)
-    load_framework("./frameworks/AdSupport.framework")
-    load_framework("./frameworks/AdBuddiz.framework")
-    Ad = autoclass("AdBuddiz")
-    Logger.info("\n\nview class methods:\n" + str(dir(Ad)))
-    Logger.info("\n\nview instance methods:\n" + str(dir(Ad.alloc())))
+# if platform == 'android':
+#     ##Billing
+#     from jnius import autoclass
+#     import oiabilling
+#     ##Advertising
+#     PythonActivity = autoclass("org.renpy.android.PythonActivity")
+#     AdBuddiz = autoclass("com.purplebrain.adbuddiz.sdk.AdBuddiz")
+# elif platform == 'ios' and paidApp is False:
+#     from pyobjus import autoclass
+#     from pyobjus.dylib_manager import load_framework, INCLUDE,  make_dylib, load_dylib
+#     load_framework(INCLUDE.StoreKit)
+#     load_framework(INCLUDE.AVFoundation)
+#     load_framework(INCLUDE.SystemConfiguration)
+#     load_framework("./frameworks/AdSupport.framework")
+#     load_framework("./frameworks/AdBuddiz.framework")
+#     Ad = autoclass("AdBuddiz")
+#     Logger.info("\n\nview class methods:\n" + str(dir(Ad)))
+#     Logger.info("\n\nview instance methods:\n" + str(dir(Ad.alloc())))
 
 class CustomLayout(FloatLayout):
     pass
@@ -79,39 +79,39 @@ class ChicagoApp(App):
         for f in ('cardborder.png', 'greenTable.jpg', 'simpleTable.jpg'):
             data = io.BytesIO(open('./images/' + f, "rb").read())
             CoreImage(data, ext=f[-3:], filename='./images/' + f)
-        if platform == "android":
-            ##set up AdBuddiz
-            AdBuddiz.setPublisherKey("_ANDROIDADKEY_")
-            #AdBuddiz.setTestModeActive() # todo - Comment this line before releasing!
-            AdBuddiz.cacheAds(PythonActivity.mActivity)
-        elif platform == 'ios' and paidApp is False:
-            #import <AdBuddiz/AdBuddiz.h>
-            Ad.setPublisherKey_("_IOSADDKEY_")
-            Ad.cacheAds()
-            Ad.setTestModeActive()
-            pass
+        # if platform == "android":
+        #     ##set up AdBuddiz
+        #     AdBuddiz.setPublisherKey("_ANDROIDADKEY_")
+        #     #AdBuddiz.setTestModeActive() # todo - Comment this line before releasing!
+        #     AdBuddiz.cacheAds(PythonActivity.mActivity)
+        # elif platform == 'ios' and paidApp is False:
+        #     #import <AdBuddiz/AdBuddiz.h>
+        #     Ad.setPublisherKey_("_IOSADDKEY_")
+        #     Ad.cacheAds()
+        #     Ad.setTestModeActive()
+        #     pass
 
     def build(self):
         Logger.info('build FIRED')
         ##Build the shop screen and set up billing
-        if platform == 'android':
-            global billing
-            self.billing = billing = oiabilling.Billing(["net.roadtrip2001.kivychicago.noads",
-                                                         "net.roadtrip2001.kivychicago.sweden_flaggedcards",
-                                                         "net.roadtrip2001.kivychicago.usa_flaggedcards",
-                                                         "net.roadtrip2001.kivychicago.uk_flaggedcards"],
-                                                        'net.roadtrip2001.kivychicago.Config')
-            #self.billing.setConsumable("fr.alborini.openiab4kivy.gas")
-            ##Add all the screens
-            if (self.billing.consumed.has_key("net.roadtrip2001.kivychicago.noads") and
-                self.billing.consumed["net.roadtrip2001.kivychicago.noads"]):
-                self.noAds = True
-            else:
-                self.noAds = False
-        elif platform == "ios" and paidApp is True:
-            self.noAds = True   # THIS WILL CHANGE
-        else:
-            self.noAds = False
+        # if platform == 'android':
+        #     global billing
+        #     self.billing = billing = oiabilling.Billing(["net.roadtrip2001.kivychicago.noads",
+        #                                                  "net.roadtrip2001.kivychicago.sweden_flaggedcards",
+        #                                                  "net.roadtrip2001.kivychicago.usa_flaggedcards",
+        #                                                  "net.roadtrip2001.kivychicago.uk_flaggedcards"],
+        #                                                 'net.roadtrip2001.kivychicago.Config')
+        #     #self.billing.setConsumable("fr.alborini.openiab4kivy.gas")
+        #     ##Add all the screens
+        #     if (self.billing.consumed.has_key("net.roadtrip2001.kivychicago.noads") and
+        #         self.billing.consumed["net.roadtrip2001.kivychicago.noads"]):
+        #         self.noAds = True
+        #     else:
+        #         self.noAds = False
+        # elif platform == "ios" and paidApp is True:
+        #     self.noAds = True   # THIS WILL CHANGE
+        # else:
+        self.noAds = True
         sm = ScreenManager()
         sm.add_widget(Menu_Screen(name='menuScreen'))
         sm.add_widget(Shop_Screen(name='shopScreen'))
@@ -128,7 +128,7 @@ class ChicagoApp(App):
                     f = open(App.get_running_app().user_data_dir + '/shop.dat')
                     shopData = cPickle.load(f)
                     f.close()
-                except Exception,e:
+                except Exception as e:
                     Logger.info('SHOPDATA LOAD FILE ERROR (file will be removed): ' + str(e))
                     remove(App.get_running_app().user_data_dir + '/shop.dat')
             if shopData is not None:
@@ -146,14 +146,14 @@ class ChicagoApp(App):
         #self.show_ads()
         pass
 
-    def show_ads(self, *args):
-        if self.noAds is False:
-            if platform == "android":
-                AdBuddiz.showAd(PythonActivity.mActivity)
-            elif platform == "ios":
-                Ad.showAd()
-            else:
-                pass
+    # def show_ads(self, *args):
+    #     if self.noAds is False:
+    #         if platform == "android":
+    #             AdBuddiz.showAd(PythonActivity.mActivity)
+    #         elif platform == "ios":
+    #             Ad.showAd()
+    #         else:
+    #             pass
 #                 popup = Popup(title='Advertise',
 #                               content=Label(text='Here'),
 #                               size_hint=(0.5,0.5))

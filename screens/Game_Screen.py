@@ -12,7 +12,7 @@ from os import listdir
 from os.path import isfile, join
 import random
 from copy import copy
-import cPickle
+import _pickle as cPickle
 import gc
 
 from brains.Brain import Brain
@@ -162,7 +162,7 @@ class Game_Screen(Screen):
         self.drop_sound = None
         self.tap_sound = None
         self.dealCard_sound = None
-        self.currentPlayer = None
+        self.currentPlayer = 1
         self.dealerPlayer = None
         self.stats = None
         self.callChicago = None

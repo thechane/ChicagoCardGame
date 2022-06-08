@@ -8,7 +8,7 @@ from kivy.uix.switch import Switch
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.utils import platform
-import cPickle
+import _pickle as cPickle
 from os.path import isfile
 
 class BuyButton(Button):
@@ -140,7 +140,7 @@ class Shop_Screen(Screen):
                 f = open(App.get_running_app().user_data_dir + '/shop.dat')
                 self.shopData = cPickle.load(f)
                 f.close()
-            except Exception,e:
+            except Exception as e:
                 Logger.info('SHOPDATA LOAD FILE ERROR: ' + str(e))
 
     def Save_Shop(self):

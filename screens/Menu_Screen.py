@@ -10,7 +10,7 @@ from kivy.metrics import Metrics
 from os import remove
 from os.path import isfile
 import webbrowser
-import cPickle
+import _pickle as cPickle
 
 class Menu_Screen(Screen):
 
@@ -124,7 +124,7 @@ class Menu_Screen(Screen):
                 gameData = cPickle.load(f)
                 f.close()
                 App.get_running_app().New_Game(gameData)
-            except Exception,e:
+            except Exception as e:
                 Logger.info('GAMEDATA FILE ERROR: ' + str(e))
                 try:
                     remove(App.get_running_app().user_data_dir + '/game.dat')

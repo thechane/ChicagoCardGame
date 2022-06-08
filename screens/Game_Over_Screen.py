@@ -6,7 +6,7 @@ from kivy.clock import Clock
 from brains.Particle import Particle
 from os import remove
 from os.path import isfile
-import cPickle
+import _pickle as cPickle
 
 class Game_Over_Screen(Screen):
 
@@ -36,7 +36,7 @@ class Game_Over_Screen(Screen):
                 gameData = cPickle.load(f)
                 f.close()
                 self.parent.New_Game(gameData)
-            except Exception,e:
+            except Exception as e:
                 Logger.info('GAMEDATA FILE ERROR: ' + str(e))
         try:
             remove(App.get_running_app().user_data_dir + '/game.dat')
