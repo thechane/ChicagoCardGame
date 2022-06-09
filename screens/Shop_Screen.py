@@ -27,7 +27,7 @@ class BuyButton(Button):
         self.money_sound = SoundLoader.load('./sounds/money.wav')
 
     def on_press(self, *args):
-        if App.get_running_app().billing.isConsumable(self.sku) and App.get_running_app().billing.consumed.has_key(self.sku) and App.get_running_app().billing.consumed[self.sku]:
+        if App.get_running_app().billing.isConsumable(self.sku) and self.sku in App.get_running_app().billing.consumed and App.get_running_app().billing.consumed[self.sku]:
             ##No consuming items at this time
             App.get_running_app().billing.consume(self.sku)
         else:
@@ -49,7 +49,7 @@ class BuyButton(Button):
             widgetDict[self.name + '_switch'].disabled = True
 
     def checkPurchase(self, *args):
-        if App.get_running_app().billing.consumed.has_key(self.sku) and App.get_running_app().billing.consumed[self.sku]:
+        if self.sku in App.get_running_app().billing.consumed and App.get_running_app().billing.consumed[self.sku]:
             if not App.get_running_app().billing.isConsumable(self.sku):
                 if self.text[-6:] != 'active':
                     self.text = self.text + ' active'
@@ -155,7 +155,7 @@ class Shop_Screen(Screen):
             fullsku = 'net.roadtrip2001.kivychicago.' + '_'.join(tmp)
             Logger.info('Saving SKU switch active data for ' + fullsku)
             if widget.disabled is False:
-                if (App.get_running_app().billing.consumed.has_key(fullsku) and
+                if (fullsku in App.get_running_app().billing.consumed and
                     App.get_running_app().billing.consumed[fullsku] and
                     widget.active is True):
                     Logger.info('Show data --> ' + widget.id + ' is True')

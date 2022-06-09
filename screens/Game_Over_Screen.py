@@ -82,7 +82,7 @@ class Game_Over_Screen(Screen):
             iString = "[size=20sp][b][color=0000FF] The Winner in " + str(gameStats['plays']) + " rounds[/color][/b]\n\n"
             iString += statInfo(gameStats['winner']) + "\n\n"
             iString += "[size=20sp][b][color=0000FF] The Losers[/color][/b]\n\n"
-            for pNum in xrange(1,len(gameStats['player']) + 1):
+            for pNum in range(1,len(gameStats['player']) + 1):
                 if gameStats['player'][pNum]['name'] is not None and pNum != gameStats['winner']:
                     iString += statInfo(pNum) + "\n"
             self.ids['prettyLabel'].text = iString

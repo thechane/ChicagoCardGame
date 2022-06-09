@@ -7,7 +7,7 @@ from traceback import format_exc, print_exc
 
 import kivy
 from kivy.uix.settings import SettingsWithTabbedPanel
-kivy.require('1.9.1')
+kivy.require('2.1.0')
 
 from screens.Game_Screen import Game_Screen
 from screens.Menu_Screen import Menu_Screen

@@ -210,7 +210,7 @@ class Game_Screen(Screen):
             # self.cardSmallBackImagePath = './images/back/usa.png'
             # self.cardBackImagePath = './images/back/usa.png'
         for pNum in self.hand:
-            for index in xrange(0, 5):
+            for index in range(0, 5):
                 self.ids['p' + str(pNum) + 'c' + str(index) + 'Image'].source = self.cardSmallBackImagePath
 
     def on_enter(self):
@@ -224,7 +224,7 @@ class Game_Screen(Screen):
             Widget_ToTop(iF, self.ids['dealerLabel'])
             for pNum in self.hand:
                 Widget_ToTop(iF, self.ids['p' + str(pNum) + 'nameLabel'])
-                for index in xrange(0, 5):
+                for index in range(0, 5):
                     Widget_ToTop(iF, self.ids['p' + str(pNum) + 'c' + str(index) + 'Image'])
                     Widget_ToTop(iF, self.ids['p' + str(pNum) + 'c' + str(index) + 'DiscardImage'])
         elif Configed_Bool("General", "table") is False and tI in iF.children:
@@ -528,7 +528,7 @@ class Game_Screen(Screen):
         self.nameLabelPos = []
         for playerNum in self.hand:
             tmpList = []
-            for _cardIndex in xrange(0, self.setConfig['handCount']):
+            for _cardIndex in range(0, self.setConfig['handCount']):
                 x = 0
                 if playerNum == 1 or playerNum == 2:
                     x = iF.center_x + self.circleXoffset + iF.height * self.smallCardOffset[counter][0]
@@ -554,7 +554,7 @@ class Game_Screen(Screen):
             tmpList = []
             if Get_Config_Bool(self.setConfig['viewDiscards']) is True:
                 xOffset = (iF.height * self.circleScale + customOffset) - self.ids['p1c0DiscardImage'].width * 0.2
-            for _cardIndex in xrange(0, self.setConfig['handCount']):
+            for _cardIndex in range(0, self.setConfig['handCount']):
                 x = 0
                 y = 0
                 self.ids['p' + str(playerNum) + 'c' + str(_cardIndex) + 'DiscardImage'].size = self.dCardsize
@@ -907,7 +907,7 @@ class Game_Screen(Screen):
             self.callChicago = []
             self.gameState['chicago'] = 0
         else:
-            newPlayer = Get_Next_Player(self.currentPlayer, len(self.hand.keys()))
+            newPlayer = Get_Next_Player(self.currentPlayer, len(list(self.hand.keys())))
         self.Update_Info(None)
         self.Anim_Cards_End_Turn(faceUp, newPlayer)
 
@@ -1139,7 +1139,7 @@ class Game_Screen(Screen):
         if xpos < self.xpos_home[cardStartPos]:
             Logger.info('We are going left')
             counter = 0
-            for cardPos in xrange(0, self.setConfig['handCount']):
+            for cardPos in range(0, self.setConfig['handCount']):
                 counter += 1
                 # if card are not the same and moved scatter xpos is < (left) of the current home pos
                 if newPosIndex[cardPos] != scatterID and xpos < self.xpos_home[cardPos]:
@@ -1149,14 +1149,14 @@ class Game_Screen(Screen):
                     break
                 else:
                     newPosIndex[cardPos] = copy(self.hand[self.currentPlayer]['posindex'][cardPos])
-            for index in xrange(counter, cardStartPos + 1):
+            for index in range(counter, cardStartPos + 1):
                 newPosIndex[index] = copy(self.hand[self.currentPlayer]['posindex'][index - 1])
-            for index in xrange(cardStartPos + 1, self.setConfig['handCount']):
+            for index in range(cardStartPos + 1, self.setConfig['handCount']):
                 newPosIndex[index] = copy(self.hand[self.currentPlayer]['posindex'][index])
         else:
             Logger.info('We are going right')
             counter = self.setConfig['handCount']
-            for cardPos in reversed(xrange(0, self.setConfig['handCount'])):
+            for cardPos in reversed(range(0, self.setConfig['handCount'])):
                 counter -= 1
                 # if card are not the same and moved scatter xpos is < (left) of the current home pos
                 if newPosIndex[cardPos] != scatterID and xpos > self.xpos_home[cardPos]:
@@ -1166,9 +1166,9 @@ class Game_Screen(Screen):
                     break
                 else:
                     newPosIndex[cardPos] = copy(self.hand[self.currentPlayer]['posindex'][cardPos])
-            for index in xrange(counter - 1, cardStartPos - 1, -1):
+            for index in range(counter - 1, cardStartPos - 1, -1):
                 newPosIndex[index] = copy(self.hand[self.currentPlayer]['posindex'][index + 1])
-            for index in xrange(cardStartPos - 1, -1, -1):
+            for index in range(cardStartPos - 1, -1, -1):
                 newPosIndex[index] = copy(self.hand[self.currentPlayer]['posindex'][index])
         if madeSwitch:
             self.hand[self.currentPlayer]['posindex'] = newPosIndex
@@ -1533,7 +1533,7 @@ class Game_Screen(Screen):
                 if self.hand[pNum]['score'] >= 52:
                     Logger.info('We have a Winner!!!')
                     self.stats['winner'] = pNum
-                    for pNum in xrange(1, len(self.hand) + 1):
+                    for pNum in range(1, len(self.hand) + 1):
                         self.stats['player'][pNum]['score'] = self.hand[pNum]['score']
                     self.Save_Game()
                     self.manager.current = 'gameOverScreen'
@@ -1677,7 +1677,7 @@ class Game_Screen(Screen):
             # #check if a player can still discard or not
             self.B.Set_canDiscard(self.hand, self.setConfig['cardExchangePointsLimit'])
             # #DEALER MOVE
-            self.dealerPlayer = Get_Next_Player(self.dealerPlayer, len(self.hand.keys()))
+            self.dealerPlayer = Get_Next_Player(self.dealerPlayer, len(list(self.hand.keys())))
             self.Move_Dealer_Chip()
             self.Update_Player_Circle()
             Logger.info('new dealer pos is player: ' + str(self.dealerPlayer))  # + 'pos: ' +  str(self.dealerPos[int(self.dealerPlayer) - 1][0]) + ', ' + str(self.dealerPos[int(self.dealerPlayer) - 1][1]))
@@ -1703,7 +1703,7 @@ class Game_Screen(Screen):
                         self.Reset_Game({'nextTurn': False})
 
                 for playerNum in self.hand:
-                    for index in xrange(0, self.setConfig['handCount']):
+                    for index in range(0, self.setConfig['handCount']):
                         smallCard = self.ids['p' + str(playerNum) + 'c' + str(index) + 'Image']
                         anim = Animation(x=self.xpos_center, y=0 - smallCard.height * 10, t='in_out_quart')
                         # Logger.info( str(len(self.hand)) + str(len(self.hand[playerNum]['posindex'])) + str(playerNum) + str(index) )
@@ -1714,7 +1714,7 @@ class Game_Screen(Screen):
             duration = 1
             if Configed_Bool("General", "fastPlay") is True:
                 duration = 0.5
-            for index in xrange(0, self.setConfig['handCount']):
+            for index in range(0, self.setConfig['handCount']):
                 card = self.ids['card' + str(index)]
                 doneAnim = Animation(x=int(self.xpos_center), y=0 - yOffset, d=duration)
                 doneAnim.start(card)

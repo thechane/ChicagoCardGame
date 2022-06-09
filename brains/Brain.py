@@ -74,7 +74,7 @@ class Brain(object):
             pass
         ##Straight? Flush
         isStraight = False
-        if range(LineUp[0],LineUp[0] + self.cardCount) == LineUp:
+        if list(range(LineUp[0],LineUp[0] + self.cardCount)) == LineUp:
             isStraight = True
 
         isFlush = False
