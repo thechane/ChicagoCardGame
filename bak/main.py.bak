@@ -7,7 +7,7 @@ from traceback import format_exc, print_exc
 
 import kivy
 from kivy.uix.settings import SettingsWithTabbedPanel
-kivy.require('2.1.0')
+kivy.require('1.9.1')
 
 from screens.Game_Screen import Game_Screen
 from screens.Menu_Screen import Menu_Screen
@@ -144,6 +144,7 @@ class ChicagoApp(App):
     def on_start(self):
         Logger.info('on_start FIRED')
         #self.show_ads()
+        pass
 
     # def show_ads(self, *args):
     #     if self.noAds is False:
@@ -258,11 +259,11 @@ class ChicagoApp(App):
             settings.add_json_panel('Settings', self.config, data=settings_json.read())
 
 if __name__ == '__main__':
-    ChicagoApp().run()
-    # try:
-    #     ChicagoApp().run()
-    # except:
-    #     print_exc()
+    #todo - take out plyer for production?? Don't forget to remove from .spec files also
+    try:
+        ChicagoApp().run()
+    except:
+        print_exc()
 #         if platform == 'android':
 #             his = ''
 #             for line in LoggerHistory.history:
