@@ -247,19 +247,3 @@ class ChicagoApp(App):
 
 if __name__ == "__main__":
     ChicagoApp().run()
-    # try:
-    #     ChicagoApp().run()
-    # except:
-    #     print_exc()
-#         if platform == 'android':
-#             his = ''
-#             for line in LoggerHistory.history:
-#                 his = his + str(line) + "\n"
-#             his = his + "\n\n\n" + str(format_exc()) + "\n\n----------------------------\n"
-#             f = open(App.get_running_app().user_data_dir + '/game.dat', 'r')
-#             his = his + str(f.read()) + "\n-----------------------\n"
-#             f.close()
-#             email.send(recipient = 'chicago@roadtrip2001.net',
-#                        subject = 'DEBUG:CHICAGO:CRASH',
-#                        text = his,
-#                        create_chooser = False)

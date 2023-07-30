@@ -11,9 +11,6 @@ package.name = kivychicago
 #   <activity android:name="com.purplebrain.adbuddiz.sdk.AdBuddizActivity"
 #             android:theme="@android:style/Theme.Translucent" />
 
-#IF USING don't forget we need to download google-play by running ~/.buildozer/android/platform/android-sdk-23/tools/android
-#Mark Extra->Google Play Services for download (deselect the rest).
-
 # (str) Package domain (needed for android/ios packaging)
 package.domain = net.roadtrip2001
 
@@ -37,11 +34,11 @@ version.regex = __version__ = ['"](.*)['"]
 version.filename = %(source.dir)s/main.py
 
 # (str) Application versioning (method 2)
-#version = 0.2.2
+#version = 0.1.9
 
 # (list) Application requirements
 # comma seperated e.g. requirements = sqlite3,kivy
-requirements = pyjnius,plyer,kivy
+requirements = pyjnius,kivy
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -56,6 +53,7 @@ presplash.filename = %(source.dir)s/images/ChicagoLoadingIcon.png
 
 # (str) Icon of the application
 #icon.filename = %(source.dir)s/data/icon.png
+icon.filename = %(source.dir)s/images/Android_icon.png
 
 # (str) Supported orientation (one of landscape, portrait or all)
 orientation = all
@@ -144,14 +142,10 @@ android.add_src = Config.java
 # (list) Android application meta-data to set (key=value format)
 #android.meta_data =
 android.meta_data = billing_pubkey = _BILLINGKEY_
-##ADD IF USING GOOGLE PLAY SERVICES:
-#com.google.android.gms.version=@integer/google_play_services_version,
-#com.google.android.gms.games.APP_ID=@string/app_id,
 
 # (list) Android library project to add (will be added in the
 # project.properties automatically.)
 #android.library_references =
-#ADD IF USING GOOGLE PLAY SERVICES -- android.library_references = libs/google-play-services_lib/
 
 #
 # iOS specific
@@ -168,7 +162,7 @@ android.meta_data = billing_pubkey = _BILLINGKEY_
 [buildozer]
 
 # (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))
-log_level = 2
+log_level = 0
 
 # (int) Display warning if buildozer is run as root (0 = False, 1 = True)
 warn_on_root = 1

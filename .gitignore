@@ -1,5 +1,8 @@
 .vscode/
 */__pycache__/
 kivy_venv/
+venv/
 .idea/
+.ropeproject/
+.buildozer/
 chicago.ini

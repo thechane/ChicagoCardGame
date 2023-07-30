@@ -9,10 +9,6 @@ from kivy.logger import Logger  # , LoggerHistory
 from brains.Common import Widget_ToTop, Configed_Bool
 
 
-# todo - remove from production
-# from plyer import email
-
-
 class Brain(object):
     def __init__(self, **kwargs):
         self.cardCount = kwargs.get("cardCount", 5)
