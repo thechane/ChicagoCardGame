@@ -17,17 +17,17 @@ from kivy.utils import platform
 class Menu_Screen(Screen):
     screen = {"orientation": None, "size": None}
 
-    def __init__(self, **kwargs):  ##Override Screen's constructor
+    def __init__(self, **kwargs):  # Override Screen's constructor
         Logger.info("Menu_Screen init Fired")
         super(Menu_Screen, self).__init__(
             **kwargs
-        )  ##but also run parent class constructor (__init__)
+        )  # but also run parent class constructor (__init__)
 
     def Screen_Size_Calcs(self):
         if (self.width <= self.height + self.width * 0.2) and (
                 self.width >= self.height - self.width * 0.2
         ):
-            ##~ square
+            # ~ square
             Logger.info("Square")
             self.screen["orientation"] = "square"
             if self.width < 230:
@@ -35,8 +35,8 @@ class Menu_Screen(Screen):
             else:
                 self.screen["orientation"] = "large"
         elif self.width > self.height:
-            ##Landscape
-            ##repos info and showdown drop
+            # Landscape
+            # repos info and showdown drop
             Logger.info("Landscape")
             self.screen["orientation"] = "landscape"
             if self.width < 165:
@@ -44,7 +44,7 @@ class Menu_Screen(Screen):
             else:
                 self.screen["orientation"] = "large"
         elif self.height > self.width:
-            ##portrait
+            # portrait
             Logger.info("Portrait")
             self.screen["orientation"] = "portrait"
             if self.width < 165:
@@ -87,7 +87,7 @@ class Menu_Screen(Screen):
         self.ids["aboutLO"].add_widget(self.ids["aboutLabelPadding"])
         self.ids["aboutLO2"].add_widget(self.ids["closeAboutButtonPadding"])
         self.ids["aboutLO"].add_widget(self.ids["scrollViewID"])
-        ##Still not sure how this works without the following line but it does??
+        # Still not sure how this works without the following line but it does??
         # self.ids['scrollViewID'].add_widget(self.ids['aboutLabel'])
         # self.ids['aboutLO'].add_widget(self.ids['aboutLabel'])
         self.ids["aboutLO2"].add_widget(self.ids["closeAboutButton"])
@@ -102,7 +102,7 @@ class Menu_Screen(Screen):
         self.ids["aboutLabel"].bind(on_ref_press=self.Goto_Link)
 
     def MenuScreen_Checks(self):
-        ##Fix for weak reffed widgets`
+        # Fix for weak reffed widgets`
         self.refs = [
             self.ids["aboutLabelPadding"].__self__,
             self.ids["closeAboutButtonPadding"].__self__,
@@ -147,7 +147,7 @@ class Menu_Screen(Screen):
             self.ids["t2lab"].text = "No Game Running"
 
     def Are_You_Sure(self):
-        ##Create yes know dialog
+        # Create yes know dialog
         Logger.info("Are_You_Sure FIRED")
         menuScroller = self.ids["menuScroller"]
         box = BoxLayout(
@@ -193,8 +193,10 @@ class Menu_Screen(Screen):
             cAmin.start(menuScroller)
             return True
 
-        yBut = Button(text="Yes", font_size=menuScroller.height * 0.3, size_hint_x=0.25)
-        nBut = Button(text="No", font_size=menuScroller.height * 0.3, size_hint_x=0.25)
+        yBut = Button(text="Yes", font_size=menuScroller.height *
+                      0.3, size_hint_x=0.25)
+        nBut = Button(text="No", font_size=menuScroller.height *
+                      0.3, size_hint_x=0.25)
         yBut.bind(on_press=yes_callback)
         nBut.bind(on_press=no_callback)
         lab = Label(

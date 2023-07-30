@@ -26,7 +26,7 @@ class Brain(object):
             [],
             [],
             [],
-            [],  ##['hearts','hearts','spades'], ['diamonds']
+            [],  # ['hearts','hearts','spades'], ['diamonds']
         )
 
     def Strip_Player(self, name):
@@ -43,7 +43,7 @@ class Brain(object):
     def ID_Hand(self, handStrings):
         splitHand = {"diamonds": [], "hearts": [], "spades": [], "clubs": []}
         LineUp = []
-        ##Suit Value order spades, hearts, diamonds, clubs
+        # Suit Value order spades, hearts, diamonds, clubs
         highCard = (0, 0)
         for cardname in handStrings:
             cardID = self.ID_Card(cardname)
@@ -64,18 +64,18 @@ class Brain(object):
             if cardID[0] > highCard[0]:
                 highCard = (cardID[0], suitVal)
         LineUp = sorted(LineUp)
-        ##? of a kind
+        # ? of a kind
         # DEBUGGING:  [(4, 3), (12, 1)]
         # ['4_of_spades.png', '12_of_hearts.png', '4_of_diamonds.png', '13_of_diamonds.png', '4_of_clubs.png']
         ofakind = collections.Counter(LineUp)
         self.ofAKindResult = ofakind.most_common(2)
         try:
-            ##tuple, ('value of most duplicated card', integer amount)
+            # tuple, ('value of most duplicated card', integer amount)
             Logger.info("DEBUGGING: " + str(self.ofAKindResult))
         except IndexError:
-            ##No pairs, 3 or 4 of a kinds
+            # No pairs, 3 or 4 of a kinds
             pass
-        ##Straight? Flush
+        # Straight? Flush
         isStraight = False
         if list(range(LineUp[0], LineUp[0] + self.cardCount)) == LineUp:
             isStraight = True
@@ -111,7 +111,7 @@ class Brain(object):
                 1000 + self.ofAKindResult[0][0],
                 highCard,
                 splitHand,
-            )  ##1000 + value of high card + card value of pair,value of suit
+            )  # 1000 + value of high card + card value of pair,value of suit
         else:
             return ("HIGH_CARD", highCard[0], highCard, splitHand)
 
@@ -124,13 +124,15 @@ class Brain(object):
 
     def Score_Hand(self, hand, straightFlushValue, fourKindToZero, stats):
         for playerNum in hand:
-            ##create tmp that removes DONE cards and readds those discarded during showdown
-            tmp = [value for value in hand[playerNum]["cardid"] if value != "DONE"]
+            # create tmp that removes DONE cards and readds those discarded during showdown
+            tmp = [value for value in hand[playerNum]
+                   ["cardid"] if value != "DONE"]
             tmp.extend(hand[playerNum]["showDownDiscards"])
             results = self.ID_Hand(tmp)
             hand[playerNum]["hand"] = results[0]
-            hand[playerNum]["handScore"] = (results[1], results[2][0], results[2][1])
-        ##calculate the scores storing the top marks in bestScore
+            hand[playerNum]["handScore"] = (
+                results[1], results[2][0], results[2][1])
+        # calculate the scores storing the top marks in bestScore
         bestScore = (0, 0, 0)
         for playerNum in hand:
             # Logger.info('Player ' + str(playerNum) + ' hand : ' + str(hand[playerNum]))
@@ -139,18 +141,18 @@ class Brain(object):
                     or (
                     hand[playerNum]["handScore"][0] == bestScore[0]
                     and hand[playerNum]["handScore"][1] > bestScore[1]
-            )
+                    )
                     or (
                     hand[playerNum]["handScore"][0] == bestScore[0]
                     and hand[playerNum]["handScore"][1] == bestScore[1]
                     and hand[playerNum]["handScore"][2] > bestScore[2]
-            )
+                    )
             ):
                 self.winner = playerNum
                 bestScore = hand[playerNum]["handScore"]
 
         def ScoreIt(h):
-            ##Add to the winning players score
+            # Add to the winning players score
             s = 0
             if h == "PAIR":
                 s = 1
@@ -176,13 +178,13 @@ class Brain(object):
                 s = 52
             return s
 
-        ##Update points and stats
+        # Update points and stats
         points = ScoreIt(hand[self.winner]["hand"])
         hand[self.winner]["score"] += points
         winningHand = hand[self.winner]["hand"]
         stats["player"][self.winner]["pokerWins"] = +1
 
-        ##Craft fun text message and return it
+        # Craft fun text message and return it
         if winningHand == "HIGH_CARD" and bestScore[1] > 10 and bestScore[0] < 1000:
             if bestScore[1] == 14:
                 winningHand = "Ace_High"
@@ -200,10 +202,11 @@ class Brain(object):
             stats["player"][self.winner]["highestPokerHand"] = points
             stats["player"][self.winner]["highestPokerHandText"] = winningHand
         return (
-                self.Strip_Player(hand[self.winner]["name"]) + " wins_with " + winningHand
+            self.Strip_Player(hand[self.winner]["name"]) +
+            " wins_with " + winningHand
         )
 
-    ##return True if we should try to play Poker, or False if we want to prepare for Showdown
+    # return True if we should try to play Poker, or False if we want to prepare for Showdown
     def Poker_Change(self, hand, roundNo, roundTotal):
         Logger.info("Poker_Change FIRED")
         handID = self.ID_Hand(hand)
@@ -226,14 +229,15 @@ class Brain(object):
                 cardID = self.ID_Card(hand[scatterID])
                 if (
                         (
-                                handID[1] < 3000
-                                and (  ##two pair
-                                        self.ofAKindResult[0][0] == cardID[0]
-                                        or self.ofAKindResult[1][0] == cardID[0]
-                                )
+                            handID[1] < 3000
+                            and (  # two pair
+                                self.ofAKindResult[0][0] == cardID[0]
+                                or self.ofAKindResult[1][0] == cardID[0]
+                            )
                         )
-                        or (self.ofAKindResult[0][0] == cardID[0])  ##3 of a kind
-                        or cardID[0] > 12  ##king or higher
+                        # 3 of a kind
+                        or (self.ofAKindResult[0][0] == cardID[0])
+                        or cardID[0] > 12  # king or higher
                 ):
                     continue
                 discards.append(scatterID)
@@ -266,9 +270,9 @@ class Brain(object):
         Logger.info("Chicago_Question FIRED on handID " + str(handID))
         splitHand = handID[3]
         if configData["pokerAfterShowdownScoring"] is True and handID[1] > 4000:
-            ##do not call Chicago if we have a good hand and are scoring the poker hand after the showdown (Chicago cancels this scoring)
+            # do not call Chicago if we have a good hand and are scoring the poker hand after the showdown (Chicago cancels this scoring)
             return False
-        ##Now check we have a decent amount of aces
+        # Now check we have a decent amount of aces
         aceCount = 0
         kingCount = 0
         queenCount = 0
@@ -279,7 +283,7 @@ class Brain(object):
         Logger.info("aceCount = " + str(aceCount))
         highestCardValue = handID[2][0]
         for suit in splitHand:
-            ##Consider have many of the same suit
+            # Consider have many of the same suit
             Logger.info(
                 "... risk = "
                 + str(handData[playerNum]["risk"])
@@ -289,31 +293,34 @@ class Brain(object):
                 + str(splitHand[suit])
             )
             if (
-                    (len(handData) < 4 and len(splitHand[suit]) >= 4 and aceCount >= 2)
+                    (len(handData) < 4 and len(
+                        splitHand[suit]) >= 4 and aceCount >= 2)
                     or (len(handData) == 2 and len(splitHand[suit]) >= 4 and aceCount >= 2)
                     or (len(handData) == 2 and aceCount > 2)
                     or (
                     len(handData) == 2
                     and aceCount == 2
                     and (kingCount > 1 or queenCount > 1)
-            )
+                    )
             ):
                 return True
             if (
-                    (len(handData) == 2 and len(splitHand[suit]) >= 3 and aceCount >= 2)
+                    (len(handData) == 2 and len(
+                        splitHand[suit]) >= 3 and aceCount >= 2)
                     or (
-                            len(handData) == 4
-                            and len(splitHand[suit]) >= 4
-                            and max(splitHand[suit]) > 10
+                        len(handData) == 4
+                        and len(splitHand[suit]) >= 4
+                        and max(splitHand[suit]) > 10
                     )
                     or (  # 4 players, 4 or more cards of same suit and one of those cards > 10
-                            len(handData) == 4 and len(splitHand[suit]) >= 3 and aceCount >= 2
+                        len(handData) == 4 and len(
+                            splitHand[suit]) >= 3 and aceCount >= 2
                     )
                     or (len(handData) < 4 and aceCount > 2)
                     or (
-                            len(handData) < 4
-                            and aceCount >= 2
-                            and (kingCount >= 2 or queenCount >= 2)
+                        len(handData) < 4
+                        and aceCount >= 2
+                        and (kingCount >= 2 or queenCount >= 2)
                     )
             ) and randint(0, 9) < handData[playerNum][
                 "risk"
@@ -321,10 +328,10 @@ class Brain(object):
                 return True
         if highestCardValue < 11:
             return False
-        if (handID[1] > 1000 and handID[1] < 3000) and (  ##pair or 2 pair
+        if (handID[1] > 1000 and handID[1] < 3000) and (  # pair or 2 pair
                 self.ofAKindResult[0][0] > 11 or self.ofAKindResult[1][0] > 11
         ):
-            ##If pair is high and we have at least one more highish card
+            # If pair is high and we have at least one more highish card
             for cardName in handData[playerNum]["cardid"]:
                 cardID = self.ID_Card(cardName)
                 if (
@@ -336,13 +343,14 @@ class Brain(object):
                     return True
         if (
                 (handID[1] > 3000 and handID[1] < 4000)
-                or (handID[1] > 7000 and handID[1] < 8000)  ##3 of a kind  ##4 of a kind
+                # 3 of a kind  ##4 of a kind
+                or (handID[1] > 7000 and handID[1] < 8000)
         ) and (
                 (len(handData) == 2 and self.ofAKindResult[0][0] > 12)
                 or (len(handData) == 3 and self.ofAKindResult[0][0] > 13)
                 or (self.ofAKindResult[0][0] == 14)
         ):
-            ##if we have 3 or 4 of a kind with Aces, or >= King with a two player game, or >= Queen with 3 player game
+            # if we have 3 or 4 of a kind with Aces, or >= King with a two player game, or >= Queen with 3 player game
             return True
         # todo, consider finishing on a 2 and deliberate chicago fails when we can't exchange
         return False
@@ -362,16 +370,16 @@ class Brain(object):
                 continue
             cardID = self.ID_Card(cardname)
             if self.suitWatch[0] is not None and cardID[1] == self.suitWatch[0]:
-                ##if last chicago showdown round was successful we can reuse suit which is proved safe
+                # if last chicago showdown round was successful we can reuse suit which is proved safe
                 # todo, consider if we have a 2 to finish with
                 if suitMatch[1] is not None and cardID[0] > suitMatch[1]:
                     suitMatch = (index, cardID[0])
                 elif suitMatch[1] is None:
                     suitMatch = (index, cardID[0])
             if cardID[0] > highCard[1]:
-                ##otherwise we use our highest valued card
+                # otherwise we use our highest valued card
                 highCard = (index, cardID[0], cardID[1])
-        ##if we can match the last suit played and we are close in value
+        # if we can match the last suit played and we are close in value
         if suitMatch[0] is not None and suitMatch[1] >= int(self.suitWatch[1] * 0.75):
             return suitMatch[0]
         else:
@@ -412,13 +420,15 @@ class Brain(object):
             cardID = self.ID_Card(cardname)
             if cardID[1] == activeCard[2] and cardID[0] > activeCard[1]:
                 return index
-        ##if we can't, then discard lowest card of same suit
-        lowcard = self.Return_Lowest_Card_With_Matching_Suit(hand, activeCard[2])
+        # if we can't, then discard lowest card of same suit
+        lowcard = self.Return_Lowest_Card_With_Matching_Suit(
+            hand, activeCard[2])
         if lowcard[0] is not None:
             return lowcard[0]
         # if we still can't, pick the lowest card
         # todo - more intel here - keep one of each suit for example
-        Logger.info("player " + str(pNum) + " can not play suit " + activeCard[2])
+        Logger.info("player " + str(pNum) +
+                    " can not play suit " + activeCard[2])
         self.playerCantPlaySuit[pNum - 1].append(activeCard[2])
         lowcard = (None, 15)
         for index, cardname in enumerate(hand):
@@ -454,8 +464,8 @@ class Brain(object):
                     and (activeCard is None or cardID[0] > activeCard[1])
                     and cardID[0]
                     < lowWinningCardMatchingSuit[
-                1
-            ]  ##we want to use the lowest card to break control
+                        1
+                    ]  # we want to use the lowest card to break control
             ):
                 lowWinningCardMatchingSuit = (index, cardID[0], cardID[1])
             if cardID[0] > highCard[1]:
@@ -467,7 +477,7 @@ class Brain(object):
             if (doneCounter == 0 and lowCard[0] < 7) or (
                     doneCounter == 1 and lowCard[0] < 5
             ):
-                ##ditching low card at early stages of showdown probably best
+                # ditching low card at early stages of showdown probably best
                 return lowCard[0]
             else:
                 return highCard[0]
@@ -483,17 +493,17 @@ class Brain(object):
                     and lowcardSuited[1] < 5
             ):
                 Logger.info("loose crappy withOUT taking control")
-                ##we could take control but do not as showdown has just begun and we have crappy card to loose
+                # we could take control but do not as showdown has just begun and we have crappy card to loose
                 return lowcardSuited[0]
             elif lowWinningCardMatchingSuit[0] is not None:
                 Logger.info("loose crappy and take control")
-                ##take control with crappiest card possible if we can
+                # take control with crappiest card possible if we can
                 return lowWinningCardMatchingSuit[0]
-        ##At this point we know that we can not take control, drop crappiest card of same suit
+        # At this point we know that we can not take control, drop crappiest card of same suit
         if lowcardSuited[0] is not None:
             Logger.info("can NOT take control, loose crappy matching suit")
             return lowcardSuited[0]
-        ##If we can't keep suit then find crappiest card and drop
+        # If we can't keep suit then find crappiest card and drop
         # todo consider keeping if many of same suit
         Logger.info("can NOT take control, loose crappy NO matching suit")
         self.playerCantPlaySuit[pNum - 1].append(activeCard[2])
@@ -546,7 +556,7 @@ class Brain(object):
             if not tmpList:
 
                 def finshUp(an, wi):
-                    ##Check if we have entered showdown and need to ask players if they wish to Chicago
+                    # Check if we have entered showdown and need to ask players if they wish to Chicago
                     if (
                             gsInst.gameState["controlPlayer"] is not None
                             and gsInst.gameState["chicago"] < 0
@@ -559,25 +569,25 @@ class Brain(object):
                         gsInst.ids["endTurnButton"].disabled = False
                         gsInst.ids["yesChicagoButton"].disabled = False
                         gsInst.ids["noChicagoButton"].disabled = False
-                    ##This ensures if we are in the middle of discarding in a poker round we'll show non discards as face up
-                    ##which allows the player to continue discarding before a double tap confirm
+                    # This ensures if we are in the middle of discarding in a poker round we'll show non discards as face up
+                    # which allows the player to continue discarding before a double tap confirm
                     if gsInst.gameState["discardFlag"] is True:
                         for sID in gsInst.hand[gsInst.currentPlayer]["posindex"]:
                             if sID not in gsInst.discardNumber[gsInst.currentPlayer]:
                                 gsInst.ids["card" + str(sID) + "Image"].source = (
-                                        gsInst.cardFilePath
-                                        + "/"
-                                        + gsInst.hand[gsInst.currentPlayer]["cardid"][sID]
+                                    gsInst.cardFilePath
+                                    + "/"
+                                    + gsInst.hand[gsInst.currentPlayer]["cardid"][sID]
                                 )
-                    ##if the gameScreen is not current (menu button pushed) force on_leave to fire again so cards
-                    ##are animated off screen. Prevent cards disappears and then reappearing when gameScreen is made current again.
+                    # if the gameScreen is not current (menu button pushed) force on_leave to fire again so cards
+                    # are animated off screen. Prevent cards disappears and then reappearing when gameScreen is made current again.
                     if gsInst.manager.current != "gameScreen":
                         gsInst.on_leave()
 
                 anim.bind(on_complete=finshUp)
             anim.start(card)
 
-        ##Move small cards off screen
+        # Move small cards off screen
         def moveSmallCardsOffScreen(dt):
             # Logger.info('moveSmallCardsOffScreen Fired')
             Clock.unschedule(moveSmallCardsOffScreen, all=True)
@@ -590,7 +600,7 @@ class Brain(object):
                     and gsInst.init is False
             ):
                 Logger.info("holdIt has been released, proceeding")
-                ##if all cards are done and there is an active card, we can enable the end turn button
+                # if all cards are done and there is an active card, we can enable the end turn button
                 if all(
                         item == "DONE"
                         for item in gsInst.hand[gsInst.currentPlayer]["cardid"]
@@ -612,7 +622,7 @@ class Brain(object):
                             + "c"
                             + str(scatterID)
                             + "Image"
-                            ]
+                        ]
                         anim = Animation(
                             x=gsInst.xpos_center,
                             y=0 - smallCard.height * 10,
@@ -643,11 +653,12 @@ class Brain(object):
                 + " ---------------, chicago gameState = "
                 + str(gsInst.gameState["chicago"])
             )
-            Logger.info("controlPlayer = " + str(gsInst.gameState["controlPlayer"]))
+            Logger.info("controlPlayer = " +
+                        str(gsInst.gameState["controlPlayer"]))
             if gsInst.hand[cPlayer]["cpu"] is False:
                 return self.Human_Next_Turn(gsInst)
 
-            ##Showdown CPU Play
+            # Showdown CPU Play
             def Play_Card(scatterID):
                 Logger.info("Play_Card fired with : " + str(scatterID))
                 duration = 1.2
@@ -656,8 +667,10 @@ class Brain(object):
 
                 def smallcardGone(a, w):
                     def setTmpActiveCard(a, w):
-                        cID = self.ID_Card(gsInst.hand[cPlayer]["cardid"][scatterID])
-                        gsInst.gameState["tmpActiveCard"] = (scatterID, cID[0], cID[1])
+                        cID = self.ID_Card(
+                            gsInst.hand[cPlayer]["cardid"][scatterID])
+                        gsInst.gameState["tmpActiveCard"] = (
+                            scatterID, cID[0], cID[1])
                         Logger.info("ending from setTmpActiveCard")
                         gsInst.End_Turn()
 
@@ -665,18 +678,18 @@ class Brain(object):
                     card = gsInst.ids["card" + str(scatterID)]
                     cImage = gsInst.ids["card" + str(scatterID) + "Image"]
                     cImage.source = (
-                            gsInst.cardFilePath
-                            + "/"
-                            + gsInst.hand[cPlayer]["cardid"][scatterID]
+                        gsInst.cardFilePath
+                        + "/"
+                        + gsInst.hand[cPlayer]["cardid"][scatterID]
                     )
                     box = gsInst.ids["showDownLabel"]
                     anim = Animation(
                         x=box.pos[0]
-                          + (box.width / 2)
-                          - (gsInst.ids["card0"].width / 2),
+                        + (box.width / 2)
+                        - (gsInst.ids["card0"].width / 2),
                         y=box.pos[1]
-                          + (box.height / 2)
-                          - (gsInst.ids["card0"].height / 2),
+                        + (box.height / 2)
+                        - (gsInst.ids["card0"].height / 2),
                         d=duration,
                         t="out_quint",
                     )
@@ -690,7 +703,8 @@ class Brain(object):
                     t="in_out_quad",
                 )
                 anim.bind(on_complete=smallcardGone)
-                sc = gsInst.ids["p" + str(cPlayer) + "c" + str(scatterID) + "Image"]
+                sc = gsInst.ids["p" + str(cPlayer) +
+                                "c" + str(scatterID) + "Image"]
                 Widget_ToTop(gsInst.ids["infoFloat"], sc)
                 anim.start(sc)
                 return True
@@ -706,37 +720,37 @@ class Brain(object):
                         gsInst.gameState["roundNumber"],
                         gsInst.setConfig["pokerRoundCount"],
                     )
-                    ##http://stackoverflow.com/questions/8447947/is-it-possible-to-modify-variable-in-python-that-is-in-outer-but-not-global-sc
+                    # http://stackoverflow.com/questions/8447947/is-it-possible-to-modify-variable-in-python-that-is-in-outer-but-not-global-sc
                     handID.append(hID[1])
                     return hID[0]
 
                 # get dicarded cards
                 discardList = None
                 if gsInst.hand[cPlayer]["canDiscard"] is False:
-                    ##Powerless - end turn
+                    # Powerless - end turn
                     discardList = []
                 elif Poker_Change_With_handID() is True:
                     Logger.info("handID = " + str(handID))
-                    ##Let's try to get a good poker hand
+                    # Let's try to get a good poker hand
                     discardList = self.Poker_Discards(
                         gsInst.hand[cPlayer]["cardid"],
                         gsInst.hand[cPlayer]["posindex"],
                         handID[0],
                     )
                 else:
-                    ##Let's try to position ourselves for the showdown / posible chicago call
+                    # Let's try to position ourselves for the showdown / posible chicago call
                     discardList = self.Showdown_Discards(
                         gsInst.hand[cPlayer]["cardid"], gsInst.hand[cPlayer]["posindex"]
                     )
                 Logger.info("CPU discarding" + str(discardList))
-                if not discardList:  ##If no discards
+                if not discardList:  # If no discards
                     Logger.info("ending from not discardList")
                     gsInst.End_Turn()
                     return False
                 # deal in new cards
                 Pos = gsInst.Position_Small_Card_Offscreen(
                     gsInst.ids["p1c1Image"]
-                )  ##offscreen position same for all (dealer dependant)
+                )  # offscreen position same for all (dealer dependant)
 
                 def anim_callback(a, w):
                     gsInst.gameState["discardFlag"] = True
@@ -750,11 +764,12 @@ class Brain(object):
                     )
                     scW = gsInst.ids[
                         "p" + str(cPlayer) + "c" + str(scatterID) + "Image"
-                        ]
+                    ]
                     duration = 1
                     if Configed_Bool("General", "fastPlay") is True:
                         duration = 0.5
-                    anim = Animation(x=Pos[0], y=Pos[1], d=duration, t="in_out_quad")
+                    anim = Animation(x=Pos[0], y=Pos[1],
+                                     d=duration, t="in_out_quad")
                     anim = anim + Animation(
                         x=gsInst.smallCardPos[cPlayer - 1][scatterID][0],
                         y=gsInst.smallCardPos[cPlayer - 1][scatterID][1],
@@ -792,7 +807,8 @@ class Brain(object):
                 Logger.info("CPU Chicago Q fired")
                 # shall we call Chicago?
                 if (
-                        self.Chicago_Question(gsInst.setConfig, gsInst.hand, cPlayer)
+                        self.Chicago_Question(
+                            gsInst.setConfig, gsInst.hand, cPlayer)
                         is True
                 ):
                     Logger.info("CPU will play Chicago")
@@ -816,7 +832,8 @@ class Brain(object):
                 Logger.info("CPU Chicago CPU play fired")
                 # Showdown and we have called Chicago
                 Play_Card(
-                    self.Showdown_Turn_Self_Chicago(gsInst.hand[cPlayer]["cardid"])
+                    self.Showdown_Turn_Self_Chicago(
+                        gsInst.hand[cPlayer]["cardid"])
                 )
             elif gsInst.gameState["chicago"] > 0:
                 Logger.info("OTHER Chicago CPU play fired")

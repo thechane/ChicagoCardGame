@@ -12,11 +12,11 @@ from brains.Particle import Particle
 
 
 class Game_Over_Screen(Screen):
-    def __init__(self, **kwargs):  ##Override Screen's constructor
+    def __init__(self, **kwargs):  # Override Screen's constructor
         Logger.info("Game_Over_Screen init Fired")
         super(Game_Over_Screen, self).__init__(
             **kwargs
-        )  ##but also run parent class constructor (__init__)
+        )  # but also run parent class constructor (__init__)
         self.win_sound = SoundLoader.load("./sounds/applause.wav")
 
     def Configed_Bool(self, section, key):
@@ -75,41 +75,43 @@ class Game_Over_Screen(Screen):
         else:
             gameStats = gameData["stats"]
             self.ids["prettyHeading"].text = (
-                    gameStats["player"][gameStats["winner"]]["name"] + " wins"
+                gameStats["player"][gameStats["winner"]]["name"] + " wins"
             )
 
             def statInfo(pNum):
                 s = (
-                        "[b][color=FF00FF]"
-                        + str(gameStats["player"][pNum]["name"])
-                        + "[/color][/b]\n"
+                    "[b][color=FF00FF]"
+                    + str(gameStats["player"][pNum]["name"])
+                    + "[/color][/b]\n"
                 )
-                s += "Score was " + str(gameStats["player"][pNum]["score"]) + "\n"
+                s += "Score was " + \
+                    str(gameStats["player"][pNum]["score"]) + "\n"
                 s += (
-                        "Chicagos won     - "
-                        + str(gameStats["player"][pNum]["chicagoWins"])
-                        + "\n"
-                )
-                s += (
-                        "Chicagos lost    - "
-                        + str(gameStats["player"][pNum]["chicagoLosses"])
-                        + "\n"
+                    "Chicagos won     - "
+                    + str(gameStats["player"][pNum]["chicagoWins"])
+                    + "\n"
                 )
                 s += (
-                        "Showdowns won    - "
-                        + str(gameStats["player"][pNum]["showdownWins"])
-                        + "\n"
+                    "Chicagos lost    - "
+                    + str(gameStats["player"][pNum]["chicagoLosses"])
+                    + "\n"
                 )
                 s += (
-                        "Poker round wins - "
-                        + str(gameStats["player"][pNum]["pokerWins"])
-                        + "\n"
+                    "Showdowns won    - "
+                    + str(gameStats["player"][pNum]["showdownWins"])
+                    + "\n"
+                )
+                s += (
+                    "Poker round wins - "
+                    + str(gameStats["player"][pNum]["pokerWins"])
+                    + "\n"
                 )
                 try:
                     s += (
-                            "Best poker hand   - "
-                            + str(gameStats["player"][pNum]["highestPokerHandText"])
-                            + "\n"
+                        "Best poker hand   - "
+                        + str(gameStats["player"][pNum]
+                              ["highestPokerHandText"])
+                        + "\n"
                     )
                 except:
                     s += "Best poker hand   - no scoring poker hands\n"
@@ -117,9 +119,9 @@ class Game_Over_Screen(Screen):
 
             Logger.info(str(gameStats))
             iString = (
-                    "[size=20sp][b][color=0000FF] The Winner in "
-                    + str(gameStats["plays"])
-                    + " rounds[/color][/b]\n\n"
+                "[size=20sp][b][color=0000FF] The Winner in "
+                + str(gameStats["plays"])
+                + " rounds[/color][/b]\n\n"
             )
             iString += statInfo(gameStats["winner"]) + "\n\n"
             iString += "[size=20sp][b][color=0000FF] The Losers[/color][/b]\n\n"

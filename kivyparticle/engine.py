@@ -42,7 +42,8 @@ import sys
 import os
 import math
 
-__all__ = ["EMITTER_TYPE_GRAVITY", "EMITTER_TYPE_RADIAL", "Particle", "ParticleSystem"]
+__all__ = ["EMITTER_TYPE_GRAVITY",
+           "EMITTER_TYPE_RADIAL", "Particle", "ParticleSystem"]
 
 
 EMITTER_TYPE_GRAVITY = 0
@@ -191,37 +192,46 @@ class ParticleSystem(Widget):
         self.texture = Image(self.texture_path).texture
         self.emitter_x = float(self._parse_data("sourcePosition", "x"))
         self.emitter_y = float(self._parse_data("sourcePosition", "y"))
-        self.emitter_x_variance = float(self._parse_data("sourcePositionVariance", "x"))
-        self.emitter_y_variance = float(self._parse_data("sourcePositionVariance", "y"))
+        self.emitter_x_variance = float(
+            self._parse_data("sourcePositionVariance", "x"))
+        self.emitter_y_variance = float(
+            self._parse_data("sourcePositionVariance", "y"))
         self.gravity_x = float(self._parse_data("gravity", "x"))
         self.gravity_y = float(self._parse_data("gravity", "y"))
         self.emitter_type = int(self._parse_data("emitterType"))
         self.max_num_particles = int(self._parse_data("maxParticles"))
         self.life_span = max(0.01, float(self._parse_data("particleLifeSpan")))
-        self.life_span_variance = float(self._parse_data("particleLifespanVariance"))
+        self.life_span_variance = float(
+            self._parse_data("particleLifespanVariance"))
         self.start_size = float(self._parse_data("startParticleSize"))
-        self.start_size_variance = float(self._parse_data("startParticleSizeVariance"))
+        self.start_size_variance = float(
+            self._parse_data("startParticleSizeVariance"))
         self.end_size = float(self._parse_data("finishParticleSize"))
-        self.end_size_variance = float(self._parse_data("FinishParticleSizeVariance"))
+        self.end_size_variance = float(
+            self._parse_data("FinishParticleSizeVariance"))
         self.emit_angle = math.radians(float(self._parse_data("angle")))
         self.emit_angle_variance = math.radians(
             float(self._parse_data("angleVariance"))
         )
-        self.start_rotation = math.radians(float(self._parse_data("rotationStart")))
+        self.start_rotation = math.radians(
+            float(self._parse_data("rotationStart")))
         self.start_rotation_variance = math.radians(
             float(self._parse_data("rotationStartVariance"))
         )
-        self.end_rotation = math.radians(float(self._parse_data("rotationEnd")))
+        self.end_rotation = math.radians(
+            float(self._parse_data("rotationEnd")))
         self.end_rotation_variance = math.radians(
             float(self._parse_data("rotationEndVariance"))
         )
         self.speed = float(self._parse_data("speed"))
         self.speed_variance = float(self._parse_data("speedVariance"))
-        self.radial_acceleration = float(self._parse_data("radialAcceleration"))
+        self.radial_acceleration = float(
+            self._parse_data("radialAcceleration"))
         self.radial_acceleration_variance = float(
             self._parse_data("radialAccelVariance")
         )
-        self.tangential_acceleration = float(self._parse_data("tangentialAcceleration"))
+        self.tangential_acceleration = float(
+            self._parse_data("tangentialAcceleration"))
         self.tangential_acceleration_variance = float(
             self._parse_data("tangentialAccelVariance")
         )
@@ -293,7 +303,8 @@ class ParticleSystem(Widget):
         particle.emit_radius = random_variance(
             self.max_radius, self.max_radius_variance
         )
-        particle.emit_radius_delta = (self.max_radius - self.min_radius) / life_span
+        particle.emit_radius_delta = (
+            self.max_radius - self.min_radius) / life_span
 
         particle.emit_rotation = random_variance(
             self.emit_angle, self.emit_angle_variance
@@ -321,8 +332,10 @@ class ParticleSystem(Widget):
         ) / self.texture.width
 
         # colors
-        start_color = random_color_variance(self.start_color, self.start_color_variance)
-        end_color = random_color_variance(self.end_color, self.end_color_variance)
+        start_color = random_color_variance(
+            self.start_color, self.start_color_variance)
+        end_color = random_color_variance(
+            self.end_color, self.end_color_variance)
 
         particle.color_delta = [
             (end_color[i] - start_color[i]) / life_span for i in range(4)
@@ -333,22 +346,26 @@ class ParticleSystem(Widget):
         start_rotation = random_variance(
             self.start_rotation, self.start_rotation_variance
         )
-        end_rotation = random_variance(self.end_rotation, self.end_rotation_variance)
+        end_rotation = random_variance(
+            self.end_rotation, self.end_rotation_variance)
         particle.rotation = start_rotation
         particle.rotation_delta = (end_rotation - start_rotation) / life_span
 
     def _advance_particle(self, particle, passed_time):
-        passed_time = min(passed_time, particle.total_time - particle.current_time)
+        passed_time = min(passed_time, particle.total_time -
+                          particle.current_time)
         particle.current_time += passed_time
 
         if self.emitter_type == EMITTER_TYPE_RADIAL:
             particle.emit_rotation += particle.emit_rotation_delta * passed_time
             particle.emit_radius -= particle.emit_radius_delta * passed_time
             particle.x = (
-                self.emitter_x - math.cos(particle.emit_rotation) * particle.emit_radius
+                self.emitter_x -
+                math.cos(particle.emit_rotation) * particle.emit_radius
             )
             particle.y = (
-                self.emitter_y - math.sin(particle.emit_rotation) * particle.emit_radius
+                self.emitter_y -
+                math.sin(particle.emit_rotation) * particle.emit_radius
             )
 
             if particle.emit_radius < self.min_radius:
@@ -408,7 +425,8 @@ class ParticleSystem(Widget):
 
         for i in range(int(old_capacity - new_capacity)):
             try:
-                self.canvas.remove(self.particles_dict[self.particles.pop()]["rect"])
+                self.canvas.remove(
+                    self.particles_dict[self.particles.pop()]["rect"])
             except:
                 pass
 
@@ -495,7 +513,8 @@ class ParticleSystem(Widget):
                     PopMatrix()
             else:
                 self.particles_dict[particle]["rotate"].angle = particle.rotation
-                self.particles_dict[particle]["translate"].xy = (particle.x, particle.y)
+                self.particles_dict[particle]["translate"].xy = (
+                    particle.x, particle.y)
                 self.particles_dict[particle]["color"].rgba = particle.color
                 self.particles_dict[particle]["rect"].points = (
                     -size[0] * 0.5,

@@ -33,7 +33,7 @@ class BuyButton(Button):
                 and self.sku in App.get_running_app().billing.consumed
                 and App.get_running_app().billing.consumed[self.sku]
         ):
-            ##No consuming items at this time
+            # No consuming items at this time
             App.get_running_app().billing.consume(self.sku)
         else:
             App.get_running_app().billing.purchase(self.sku)
@@ -87,7 +87,8 @@ class ToggleButton(Switch):
     def active_callback(self, *args):
         if self.active is True:
             if (
-                    int(App.get_running_app().config.getdefault("General", "sound", True))
+                    int(App.get_running_app().config.getdefault(
+                        "General", "sound", True))
                     == 1
             ):
                 self.active_sound.play()
@@ -99,17 +100,18 @@ class ToggleButton(Switch):
                     ):
                         widget.active = False
         elif (
-                int(App.get_running_app().config.getdefault("General", "sound", True)) == 1
+                int(App.get_running_app().config.getdefault(
+                    "General", "sound", True)) == 1
         ):
             self.deactive_sound.play()
 
 
 class Shop_Screen(Screen):
-    def __init__(self, **kwargs):  ##Override Screen's constructor
+    def __init__(self, **kwargs):  # Override Screen's constructor
         Logger.info("Shop_Screen init Fired")
         super(Shop_Screen, self).__init__(
             **kwargs
-        )  ##but also run parent class constructor (__init__)
+        )  # but also run parent class constructor (__init__)
         innerShopGL = self.ids["innerShopGL"]
         if platform == "android":
             for fullsku in App.get_running_app().billing.skus:
@@ -123,7 +125,8 @@ class Shop_Screen(Screen):
                 )
                 innerShopGL.add_widget(Label(size_hint_x=0.1))
                 innerShopGL.add_widget(
-                    ToggleButton(name=name + "_switch", disabled=True, size_hint_x=0.2)
+                    ToggleButton(name=name + "_switch",
+                                 disabled=True, size_hint_x=0.2)
                 )
 
     def on_enter(self):

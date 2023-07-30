@@ -53,10 +53,12 @@ class Game_Screen(Screen):
             Game_Screen, self
         ).__init__()  # #but also run parent class constructor (__init__)
         # self.hp = hpy()                                            ##Memory profiler
-        self.init = True  # #Is false until first Main_Float_Resize (delayed) fires
+        # #Is false until first Main_Float_Resize (delayed) fires
+        self.init = True
         self.holdIt = True
         self.tutor = None
-        self.boundChicagoButtons = False  ##prevents binding callback to call / don't call Chicago buttons more than once
+        # prevents binding callback to call / don't call Chicago buttons more than once
+        self.boundChicagoButtons = False
         self.tutorialRefPress = (
             False  # Prevents multiple bindings for tutorial link refs
         )
@@ -100,7 +102,7 @@ class Game_Screen(Screen):
         )  # #https://www.freesound.org/people/f4ngy/ (no edits)
         self.cheat_sound = SoundLoader.load("./sounds/cheat.wav")
         self.dealerPlayer = (
-                kwargs.get("playerCount") - 1
+            kwargs.get("playerCount") - 1
         )  # #player that started last game
         self.stats = {}
         self.callChicago = []
@@ -109,7 +111,8 @@ class Game_Screen(Screen):
         ] = {}  # #Either None or No, populated during chicago decision round
         self.setConfig = {
             "handCount": kwargs.get("handCount"),  # #Number of cards in a hand
-            "pokerRoundCount": kwargs.get("rounds"),  # #Number of opening poker rounds
+            # #Number of opening poker rounds
+            "pokerRoundCount": kwargs.get("rounds"),
             "pokerRoundScoring": kwargs.get(
                 "pokerRoundScoring"
             ),  # #Score every poker round?
@@ -158,22 +161,23 @@ class Game_Screen(Screen):
             if self.gameState["activeCard"] is not None:
                 self.ids["activeCardImage"].color = [1, 1, 1, 1]
                 self.ids["activeCardImage"].source = (
-                        self.cardFilePath
-                        + "/"
-                        + str(self.gameState["activeCard"][1])
-                        + "_of_"
-                        + self.gameState["activeCard"][2]
-                        + ".png"
+                    self.cardFilePath
+                    + "/"
+                    + str(self.gameState["activeCard"][1])
+                    + "_of_"
+                    + self.gameState["activeCard"][2]
+                    + ".png"
                 )
             for pNum in self.hand:
                 for cardNum, cardName in enumerate(self.hand[pNum]["showDownDiscards"]):
                     dCard = self.ids[
                         "p" + str(pNum) + "c" + str(cardNum) + "DiscardImage"
-                        ]
+                    ]
                     dCard.source = self.cardFilePath + "/" + cardName
             self.gameState["doubleTapConfirm"] = False
             Logger.info(
-                "Loaded in game data, current player now " + str(self.currentPlayer)
+                "Loaded in game data, current player now " +
+                str(self.currentPlayer)
             )
 
             def nextP(dt):
@@ -239,10 +243,10 @@ class Game_Screen(Screen):
             self.ids["backGroundImage"].source = "./images/greenTable.jpg"
         if App.get_running_app().root.shopCard is not None:
             self.cardSmallBackImagePath = (
-                    "./images/back/" + App.get_running_app().root.shopCard + "_small.png"
+                "./images/back/" + App.get_running_app().root.shopCard + "_small.png"
             )
             self.cardBackImagePath = (
-                    "./images/back/" + App.get_running_app().root.shopCard + ".png"
+                "./images/back/" + App.get_running_app().root.shopCard + ".png"
             )
         elif Configed_Bool("General", "simplecardback") is True:
             self.cardSmallBackImagePath = "./images/back/simpleback_small.png"
@@ -256,7 +260,7 @@ class Game_Screen(Screen):
             for index in range(0, 5):
                 self.ids[
                     "p" + str(pNum) + "c" + str(index) + "Image"
-                    ].source = self.cardSmallBackImagePath
+                ].source = self.cardSmallBackImagePath
 
     def on_enter(self):
         Logger.info("on_enter FIRED")
@@ -271,11 +275,13 @@ class Game_Screen(Screen):
                 Widget_ToTop(iF, self.ids["p" + str(pNum) + "nameLabel"])
                 for index in range(0, 5):
                     Widget_ToTop(
-                        iF, self.ids["p" + str(pNum) + "c" + str(index) + "Image"]
+                        iF, self.ids["p" + str(pNum) +
+                                     "c" + str(index) + "Image"]
                     )
                     Widget_ToTop(
                         iF,
-                        self.ids["p" + str(pNum) + "c" + str(index) + "DiscardImage"],
+                        self.ids["p" + str(pNum) + "c" +
+                                 str(index) + "DiscardImage"],
                     )
         elif Configed_Bool("General", "table") is False and tI in iF.children:
             Logger.info("table image removed")
@@ -343,7 +349,8 @@ class Game_Screen(Screen):
         ):
             # #Chicago Question
             if (
-                    self.B.Chicago_Question(self.setConfig, self.hand, self.currentPlayer)
+                    self.B.Chicago_Question(
+                        self.setConfig, self.hand, self.currentPlayer)
                     is True
             ):
                 return "Decent enough showdown hand\nsuggest calling Chicago"
@@ -415,12 +422,15 @@ class Game_Screen(Screen):
         self.ids["helpButton"].disabled = True
         try:
             self.ids["tutorialLO"].add_widget(self.ids["tutorialLabelPadding"])
-            self.ids["tutorialLO2"].add_widget(self.ids["closeTutorialButtonPadding"])
+            self.ids["tutorialLO2"].add_widget(
+                self.ids["closeTutorialButtonPadding"])
             self.ids["tutorialLO"].add_widget(self.ids["svID"])
             # self.ids['tutorialLO'].add_widget(self.ids['tutorialLabel'])
             self.ids["tutorialLO2"].add_widget(self.ids["closeTutorialButton"])
-            self.ids["tutorialLO"].add_widget(self.ids["tutorialLabelPadding2"])
-            self.ids["tutorialLO2"].add_widget(self.ids["closeTutorialButtonPadding2"])
+            self.ids["tutorialLO"].add_widget(
+                self.ids["tutorialLabelPadding2"])
+            self.ids["tutorialLO2"].add_widget(
+                self.ids["closeTutorialButtonPadding2"])
         except:
             Logger.error("tutorial widgets already present")
         with open(tFile, "r") as myfile:
@@ -449,12 +459,14 @@ class Game_Screen(Screen):
         except:
             playerInfo = None
             playerCount = None
-        Logger.info("-----------------RESET FIRED---------------------" + str(kwargs))
+        Logger.info(
+            "-----------------RESET FIRED---------------------" + str(kwargs))
         self.gameState = {
             "discards": set(),  # # empty set to hold the discard pile
             "deck": set(self.files),  # # set of cards that = filename
             "tmpActiveCard": None,  # #Stores temp version of activeCard for transition between turns
-            "activeCard": None,  # #Showdown active card (current scatterID,card value,card suit)
+            # #Showdown active card (current scatterID,card value,card suit)
+            "activeCard": None,
             "controlPlayer": None,  # #Player Number who is in control, set when showdown starts
             "tmpControlPlayer": None,  # #player who has stolen control mid showdown
             "roundNumber": 1,  # #current poker round number, = 0 when in showdown
@@ -522,7 +534,8 @@ class Game_Screen(Screen):
                 "posindex": copy(tmpIndex),
                 "hand": None,  # #Name of hand (straight, pair...)
                 "showDownDiscards": [],  # #stored cards discarded in the showdown
-                "handScore": (0, 0, 0),  # #score, highcard value, highcard suitvalue
+                # #score, highcard value, highcard suitvalue
+                "handScore": (0, 0, 0),
                 "score": score,  # #actual Chicago points total
                 "canDiscard": canDiscard,
                 "cpu": cpu,
@@ -630,20 +643,20 @@ class Game_Screen(Screen):
                 x = 0
                 if playerNum == 1 or playerNum == 2:
                     x = (
-                            iF.center_x
-                            + self.circleXoffset
-                            + iF.height * self.smallCardOffset[counter][0]
+                        iF.center_x
+                        + self.circleXoffset
+                        + iF.height * self.smallCardOffset[counter][0]
                     )
                 else:
                     x = (
-                            iF.center_x
-                            + self.circleXoffset
-                            - iF.height * self.smallCardOffset[counter][0]
+                        iF.center_x
+                        + self.circleXoffset
+                        - iF.height * self.smallCardOffset[counter][0]
                     )
                 y = (
-                        iF.center_y
-                        + iF.height * self.smallCardOffset[counter][1]
-                        - self.circleYoffset
+                    iF.center_y
+                    + iF.height * self.smallCardOffset[counter][1]
+                    - self.circleYoffset
                 )
                 tmpList.append([x, y])
                 counter = counter + 1
@@ -670,45 +683,47 @@ class Game_Screen(Screen):
                 x = 0
                 y = 0
                 self.ids[
-                    "p" + str(playerNum) + "c" + str(_cardIndex) + "DiscardImage"
-                    ].size = self.dCardsize
+                    "p" + str(playerNum) + "c" +
+                    str(_cardIndex) + "DiscardImage"
+                ].size = self.dCardsize
                 if Get_Config_Bool(self.setConfig["viewDiscards"]) is True:
-                    xOffset = xOffset + self.ids["p1c0DiscardImage"].width * 0.2
+                    xOffset = xOffset + \
+                        self.ids["p1c0DiscardImage"].width * 0.2
                 if playerNum == 2:
                     x = iF.center_x + self.circleXoffset + xOffset
                     y = (
-                            iF.center_y
-                            + (iF.height * self.circleScale)
-                            - self.circleYoffset
-                            + (iF.height * self.circleScale / 6)
+                        iF.center_y
+                        + (iF.height * self.circleScale)
+                        - self.circleYoffset
+                        + (iF.height * self.circleScale / 6)
                     )
                 elif playerNum == 1:
                     x = iF.center_x + self.circleXoffset + xOffset
                     y = (
-                            iF.center_y
-                            + (iF.height * self.circleScale)
-                            - self.circleYoffset
-                            - (iF.height * self.circleScale)
+                        iF.center_y
+                        + (iF.height * self.circleScale)
+                        - self.circleYoffset
+                        - (iF.height * self.circleScale)
                     )
                 elif playerNum == 3:
                     x = (
-                            iF.center_x + self.circleXoffset - xOffset - iF.height * 0.12
+                        iF.center_x + self.circleXoffset - xOffset - iF.height * 0.12
                     )  # iF.height calc must match Kivy file
                     y = (
-                            iF.center_y
-                            + (iF.height * self.circleScale)
-                            - self.circleYoffset
-                            - (iF.height * self.circleScale)
+                        iF.center_y
+                        + (iF.height * self.circleScale)
+                        - self.circleYoffset
+                        - (iF.height * self.circleScale)
                     )
                 elif playerNum == 4:
                     x = (
-                            iF.center_x + self.circleXoffset - xOffset - iF.height * 0.12
+                        iF.center_x + self.circleXoffset - xOffset - iF.height * 0.12
                     )  # iF.height calc must match Kivy file
                     y = (
-                            iF.center_y
-                            + (iF.height * self.circleScale)
-                            - self.circleYoffset
-                            + (iF.height * self.circleScale / 6)
+                        iF.center_y
+                        + (iF.height * self.circleScale)
+                        - self.circleYoffset
+                        + (iF.height * self.circleScale / 6)
                     )
                 tmpList.append([x, y])
                 counter = counter + 1
@@ -739,7 +754,8 @@ class Game_Screen(Screen):
                 player = self.dealerPlayer + playerOffset
             card = index % self.setConfig["handCount"]
             anim = None
-            Logger.info("Anim for player " + str(player) + " card " + str(card))
+            Logger.info("Anim for player " +
+                        str(player) + " card " + str(card))
             scW = self.ids["p" + str(player) + "c" + str(card) + "Image"]
             if player > len(self.hand) or self.hand[player]["cardid"][card] == "DONE":
                 # #if the card is done do not move it
@@ -826,8 +842,9 @@ class Game_Screen(Screen):
                     plab.font_size = "20sp"
                 for index in self.hand[playerNum]["posindex"]:
                     dCard = self.ids[
-                        "p" + str(playerNum) + "c" + str(index) + "DiscardImage"
-                        ]
+                        "p" + str(playerNum) + "c" +
+                        str(index) + "DiscardImage"
+                    ]
                     if (
                             "/back/" not in dCard.source
                     ):  # #If not showing the back of a card
@@ -959,8 +976,10 @@ class Game_Screen(Screen):
             self.ypos_center = self.center_y - (self.ids["card0"].size[1] / 2)
         except:
             # #match to size hint in kv file
-            self.xpos_center = self.center_x - (self.width * self.xCardVector / 2)
-            self.ypos_center = self.center_y - (self.height * self.yCardVector / 2)
+            self.xpos_center = self.center_x - \
+                (self.width * self.xCardVector / 2)
+            self.ypos_center = self.center_y - \
+                (self.height * self.yCardVector / 2)
         # #Card home pos
         xpos = (self.width - self.width * 0.1) / 6
         self.xpos_home = [
@@ -1021,9 +1040,9 @@ class Game_Screen(Screen):
                         continue
                     cImage = self.ids["card" + str(sID) + "Image"]
                     cImage.source = (
-                            self.cardFilePath
-                            + "/"
-                            + self.hand[self.currentPlayer]["cardid"][sID]
+                        self.cardFilePath
+                        + "/"
+                        + self.hand[self.currentPlayer]["cardid"][sID]
                     )
             else:
                 # #otherwise blank the hand out if ALL are face up
@@ -1096,7 +1115,8 @@ class Game_Screen(Screen):
             self.callChicago = []
             self.gameState["chicago"] = 0
         else:
-            newPlayer = Get_Next_Player(self.currentPlayer, len(list(self.hand.keys())))
+            newPlayer = Get_Next_Player(
+                self.currentPlayer, len(list(self.hand.keys())))
         self.Update_Info(None)
         self.Anim_Cards_End_Turn(faceUp, newPlayer)
 
@@ -1191,9 +1211,9 @@ class Game_Screen(Screen):
             cardImage = self.ids["card" + str(scatterID) + "Image"]
             if cardImage.source != self.cardBackImagePath:
                 cardImage.source = (
-                        self.cardFilePath
-                        + "/"
-                        + self.hand[self.currentPlayer]["cardid"][scatterID]
+                    self.cardFilePath
+                    + "/"
+                    + self.hand[self.currentPlayer]["cardid"][scatterID]
                 )
 
         for cardxPos, scatterID in enumerate(self.hand[self.currentPlayer]["posindex"]):
@@ -1242,8 +1262,10 @@ class Game_Screen(Screen):
             # #If a card has been discarded in middle box
             if box.collide_point(*self.pressed_up) is True:
                 anim = Animation(
-                    x=box.pos[0] + (box.width / 2) - (self.ids["card0"].width / 2),
-                    y=box.pos[1] + (box.height / 2) - (self.ids["card0"].height / 2),
+                    x=box.pos[0] + (box.width / 2) -
+                    (self.ids["card0"].width / 2),
+                    y=box.pos[1] + (box.height / 2) -
+                    (self.ids["card0"].height / 2),
                     d=0.5,
                 )
                 self.ids["endTurnButton"].disabled = True
@@ -1264,12 +1286,13 @@ class Game_Screen(Screen):
                                 self.gameState["activeCard"] is not None
                                 and self.gameState["activeCard"][2] != cardID[1]
                                 and self.B.Does_Player_Have_Matching_Suit(
-                            self.hand[self.currentPlayer]["cardid"],
-                            self.gameState["activeCard"][2],
-                        )
+                                    self.hand[self.currentPlayer]["cardid"],
+                                    self.gameState["activeCard"][2],
+                                )
                                 is True
                         ):
-                            self.Flash_Box("Must play same\nsuit when available")
+                            self.Flash_Box(
+                                "Must play same\nsuit when available")
                         else:
                             self.gameState["tmpActiveCard"] = (
                                 scatterID,
@@ -1312,20 +1335,22 @@ class Game_Screen(Screen):
             movedCard = True
             if (
                     (
-                            card.pos[0] > int(self.right - self.card_xsize_rightvector)
-                            and card.pos[1] > self.card_ysize_vector
+                        card.pos[0] > int(
+                            self.right - self.card_xsize_rightvector)
+                        and card.pos[1] > self.card_ysize_vector
                     )
                     or (
                     card.pos[0] < 0 - self.card_xsize_leftvector
                     and card.pos[1] > self.card_ysize_vector
-            )
+                    )
                     or (card.pos[1] < 0 - self.card_ysize_bottomvector)
             ):
                 if self.gameState["controlPlayer"] is None:
                     self.Discard_Card(scatterID)
                     return
                 else:
-                    self.Flash_Box("No exchanging of cards\nduring the showdown")
+                    self.Flash_Box(
+                        "No exchanging of cards\nduring the showdown")
 
             if self.Reorder_Hand(cardxPos, scatterID, card.pos[0]) is True:
                 break
@@ -1350,7 +1375,8 @@ class Game_Screen(Screen):
         Logger.info("tmpActiveCard = " + str(self.gameState["tmpActiveCard"]))
         Logger.info("chicago = " + str(self.gameState["chicago"]))
         Logger.info("controlPlayer = " + str(self.gameState["controlPlayer"]))
-        Logger.info("tmpControlPlayer = " + str(self.gameState["tmpControlPlayer"]))
+        Logger.info("tmpControlPlayer = " +
+                    str(self.gameState["tmpControlPlayer"]))
         # Logger.info('discardFlag = ' + str(self.gameState['discardFlag']))
         # Logger.info('discardNumber lists = ' + str(self.discardNumber))
         # Logger.info('doubleTapConfirm = ' + str(self.gameState['doubleTapConfirm']))
@@ -1450,15 +1476,17 @@ class Game_Screen(Screen):
             ]  # #put the discards back into the deck (remember they are given out randomly unlike in real life
             self.gameState["discards"] = set()  # #and then empty the
             newCards = newCards + random.sample(
-                self.gameState["deck"], len(discarded) - len(newCards)
+                sorted(self.gameState["deck"]), len(discarded) - len(newCards)
             )
         else:
-            newCards = random.sample(sorted(self.gameState["deck"]), len(discarded))
+            newCards = random.sample(
+                sorted(self.gameState["deck"]), len(discarded))
         self.gameState["deck"] = self.gameState["deck"] - set(newCards)
         if (
                 discarded[0] is not None
         ):  # #Since none will only be possible is all discards are None (new game)
-            self.gameState["discards"] = self.gameState["discards"] | set(discarded)
+            self.gameState["discards"] = self.gameState["discards"] | set(
+                discarded)
 
         for discard in discarded:
             for index, card in enumerate(self.hand[playerNumber]["cardid"]):
@@ -1518,7 +1546,8 @@ class Game_Screen(Screen):
             ] = False  # #discardFlag must be False and so we can cancel this doubleTapConfirm
 
         if len(self.discardNumber[self.currentPlayer]) >= 5:
-            self.Flash_Box("You can not discard the\nsame card twice in one round")
+            self.Flash_Box(
+                "You can not discard the\nsame card twice in one round")
             self.Center_Pos(scatterID)
             return
         elif scatterID in self.discardNumber[self.currentPlayer]:
@@ -1564,7 +1593,8 @@ class Game_Screen(Screen):
                     nameLabel = self.ids["p" + str(player) + "nameLabel"]
                     xpos = nameLabel.pos[0] + nameLabel.width * 0.5
                     ypos = nameLabel.pos[1]
-                    P.show(id=effect, x=xpos, y=ypos, layout=self.ids["infoFloat"])
+                    P.show(id=effect, x=xpos, y=ypos,
+                           layout=self.ids["infoFloat"])
                     # P.show(id = effect, x = self.width * 0.5, y = self.height * 0.5 + P.height)
             Logger.info("effect = " + str(effect))
 
@@ -1616,7 +1646,7 @@ class Game_Screen(Screen):
                     ypos = ypos - height
                 else:
                     l.source = (
-                            "./images/funtext/funtext" + color + char.lower() + ".png"
+                        "./images/funtext/funtext" + color + char.lower() + ".png"
                     )
                     l.width = l.texture_size[0]
                     l.height = l.texture_size[1]
@@ -1651,16 +1681,17 @@ class Game_Screen(Screen):
             padding = "  "
         if infoString is None:
             iString = (
-                    padding
-                    + "[size="
-                    + str(size)
-                    + "sp][color=0000ff]\n Scorecard\n[/color]"
+                padding
+                + "[size="
+                + str(size)
+                + "sp][color=0000ff]\n Scorecard\n[/color]"
             )
             iString += "[color=0000ff][/color]"
             for p in self.hand:
                 iString += padding + "[color=0000ee] "
                 iString += (
-                        self.hand[p]["name"][0:7] + " : " + str(self.hand[p]["score"])
+                    self.hand[p]["name"][0:7] + " : " +
+                    str(self.hand[p]["score"])
                 )
                 if p == self.gameState["chicago"]:
                     iString += "[/color][color=ff0000] -CHICAGO"
@@ -1678,17 +1709,17 @@ class Game_Screen(Screen):
                 # #Poker Rounds
                 if self.portrait is True and self.smallScreen is True:
                     iString += (
-                            padding
-                            + "[b]Pkr Rnd: "
-                            + str(self.gameState["roundNumber"])
-                            + "/"
+                        padding
+                        + "[b]Pkr Rnd: "
+                        + str(self.gameState["roundNumber"])
+                        + "/"
                     )
                 else:
                     iString += (
-                            padding
-                            + " [b]Poker Round: "
-                            + str(self.gameState["roundNumber"])
-                            + " of "
+                        padding
+                        + " [b]Poker Round: "
+                        + str(self.gameState["roundNumber"])
+                        + " of "
                     )
                 iString += str(self.setConfig["pokerRoundCount"]) + "[/b]"
             elif self.gameState["activeCard"] is None and self.gameState["chicago"] < 0:
@@ -1701,18 +1732,22 @@ class Game_Screen(Screen):
                 # #Showdown
                 if self.portrait is True and self.smallScreen is True:
                     iString += (
-                            padding
-                            + "Ctl:"
-                            + self.hand[self.gameState["controlPlayer"]]["name"][0:7]
+                        padding
+                        + "Ctl:"
+                        + self.hand[self.gameState["controlPlayer"]
+                                    ]["name"][0:7]
                     )
                 else:
                     iString += (
-                            padding
-                            + " Control:"
-                            + self.hand[self.gameState["controlPlayer"]]["name"][0:7]
+                        padding
+                        + " Control:"
+                        + self.hand[self.gameState["controlPlayer"]
+                                    ]["name"][0:7]
                     )
                 iString += (
-                        "(" + str(self.hand[self.gameState["controlPlayer"]]["score"]) + ")"
+                    "(" +
+                    str(self.hand[self.gameState["controlPlayer"]]
+                        ["score"]) + ")"
                 )
             if self.smallScreen is True or (
                     self.smallScreen is False
@@ -1735,8 +1770,8 @@ class Game_Screen(Screen):
         topBut = self.ids["menuButton"]
         if (
                 self.gameState["chicago"] == -2
-        ):  ##we want to extend further down due to larger
-            topBut = self.ids["yesChicagoButton"]  ##sized chicago buttons
+        ):  # we want to extend further down due to larger
+            topBut = self.ids["yesChicagoButton"]  # sized chicago buttons
 
         # #Calc the outYpos
         outYpos = (self.pos[1] + self.height) - il.height - topBut.height
@@ -1778,14 +1813,15 @@ class Game_Screen(Screen):
             c.size_hint = self.xCardVector, self.yCardVector
             c.source = self.cardFilePath + "/" + cardName
             xpos = self.xpos_center + (c.width * 0.25) * (
-                    len(self.hand[pNum]["showDownDiscards"]) - doneCount
+                len(self.hand[pNum]["showDownDiscards"]) - doneCount
             )
             yPos = self.ypos_center + c.height
             c.pos = mainFloat.width + c.width, yPos
             mainFloat.add_widget(c)
             anim = Animation(x=xpos, y=self.ypos_center, t="in_quad")
             anim = anim + Animation(x=xpos, y=yPos, d=2.5)
-            anim = anim + Animation(x=c.width + mainFloat.width, y=yPos, t="in_expo")
+            anim = anim + Animation(x=c.width +
+                                    mainFloat.width, y=yPos, t="in_expo")
             anim.bind(on_complete=animation_complete)
             anim.start(c)
 
@@ -1852,10 +1888,12 @@ class Game_Screen(Screen):
             self.dealCard_sound.play()
         Logger.info("chicago state = " + str(self.gameState["chicago"]))
         Logger.info("controlPlayer = " + str(self.gameState["controlPlayer"]))
-        Logger.info("tmpControlPlayer = " + str(self.gameState["tmpControlPlayer"]))
+        Logger.info("tmpControlPlayer = " +
+                    str(self.gameState["tmpControlPlayer"]))
         Logger.info("activeCard = " + str(self.gameState["activeCard"]))
         Logger.info("tmpActiveCard = " + str(self.gameState["tmpActiveCard"]))
-        Logger.info("poker round count = " + str(self.setConfig["pokerRoundCount"]))
+        Logger.info("poker round count = " +
+                    str(self.setConfig["pokerRoundCount"]))
         Logger.info("round number = " + str(self.gameState["roundNumber"]))
         Logger.info(str(self.hand))
 
@@ -1890,21 +1928,24 @@ class Game_Screen(Screen):
 
         if (
                 self.gameState["controlPlayer"] is not None
-                and self.gameState["tmpActiveCard"] is not None  # #in Showdown / Chicago
+                # #in Showdown / Chicago
+                and self.gameState["tmpActiveCard"] is not None
                 and (  # #and a card has been played
                 self.gameState["activeCard"] is None
                 or (  # #and no current active card OR
-                        self.gameState["tmpActiveCard"][2]
-                        == self.gameState["activeCard"][2]
-                        and self.gameState["tmpActiveCard"][1]  # # cards suits match
-                        > self.gameState["activeCard"][1]
-                        # # top card value is greater
+                    self.gameState["tmpActiveCard"][2]
+                    == self.gameState["activeCard"][2]
+                    # # cards suits match
+                    and self.gameState["tmpActiveCard"][1]
+                    > self.gameState["activeCard"][1]
+                    # # top card value is greater
                 )
-        )
+                )
         ):
             if Configed_Bool("General", "sound") is True:
                 self.tocktick_sound.play()
-            self.gameState["activeCard"] = copy(self.gameState["tmpActiveCard"])
+            self.gameState["activeCard"] = copy(
+                self.gameState["tmpActiveCard"])
             faceUp = (
                 self.gameState["tmpActiveCard"][0],
                 copy(
@@ -1916,11 +1957,11 @@ class Game_Screen(Screen):
             self.gameState["tmpActiveCard"] = None
             self.ids["activeCardImage"].color = [1, 1, 1, 1]
             self.ids["activeCardImage"].source = (
-                    self.cardFilePath
-                    + "/"
-                    + self.hand[self.currentPlayer]["cardid"][
-                        self.gameState["activeCard"][0]
-                    ]
+                self.cardFilePath
+                + "/"
+                + self.hand[self.currentPlayer]["cardid"][
+                    self.gameState["activeCard"][0]
+                ]
             )
             self.gameState["tmpControlPlayer"] = copy(self.currentPlayer)
             self.hand[self.currentPlayer]["showDownDiscards"].append(
@@ -1934,7 +1975,8 @@ class Game_Screen(Screen):
                 self.gameState["activeCard"][0]
             ] = "DONE"
             Logger.info(
-                "tmpControlPlayer changed to " + str(self.gameState["tmpControlPlayer"])
+                "tmpControlPlayer changed to " +
+                str(self.gameState["tmpControlPlayer"])
             )
             self.ids["card" + str(self.gameState["activeCard"][0])].pos = (
                 int(self.xpos_center),
@@ -1942,7 +1984,8 @@ class Game_Screen(Screen):
             )
         elif (
                 self.gameState["controlPlayer"] is not None
-                and self.gameState["tmpActiveCard"] is not None  # #in showdown / chicago
+                # #in showdown / chicago
+                and self.gameState["tmpActiveCard"] is not None
                 # #card has been played but since above not true it is a discard in Chicago round
         ):
             if Configed_Bool("General", "sound") is True:
@@ -1953,7 +1996,8 @@ class Game_Screen(Screen):
                 self.B.playerCantPlaySuit[self.currentPlayer - 1].append(
                     self.gameState["activeCard"][2]
                 )
-            Logger.info("player " + str(self.currentPlayer) + " does NOT take control")
+            Logger.info("player " + str(self.currentPlayer) +
+                        " does NOT take control")
             faceUp = (
                 self.gameState["tmpActiveCard"][0],
                 copy(
@@ -1964,7 +2008,8 @@ class Game_Screen(Screen):
             )
             # #animate discarded showdown card away to the dealer
             card = self.ids["card" + str(self.gameState["tmpActiveCard"][0])]
-            dACanim = Animation(x=self.width + card.width, y=card.pos[0], d=0.25)
+            dACanim = Animation(x=self.width + card.width,
+                                y=card.pos[0], d=0.25)
 
             def donedACanim(a, w):
                 # #move scatter back down under main hand and turn face down
@@ -1994,7 +2039,8 @@ class Game_Screen(Screen):
             pass
 
         # #Check for showdown status
-        showdownRoundCompleteFlag = None  # None = middle of showdown, >0 means end showdown round, 0 = start of showdown
+        # None = middle of showdown, >0 means end showdown round, 0 = start of showdown
+        showdownRoundCompleteFlag = None
         if (
                 showdownCompleteFlag is False
                 and newShowdownRound is False
@@ -2013,7 +2059,8 @@ class Game_Screen(Screen):
                     + str(self.hand[pNum]["cardid"])
                 )
                 if showdownRoundCompleteFlag is None:
-                    showdownRoundCompleteFlag = self.hand[pNum]["cardid"].count("DONE")
+                    showdownRoundCompleteFlag = self.hand[pNum]["cardid"].count(
+                        "DONE")
                 elif showdownRoundCompleteFlag != self.hand[pNum]["cardid"].count(
                         "DONE"
                 ):
@@ -2022,7 +2069,8 @@ class Game_Screen(Screen):
             if showdownRoundCompleteFlag == 5:
                 showdownCompleteFlag = True
         Logger.info("showdownCompleteFlag = " + str(showdownCompleteFlag))
-        Logger.info("showdownRoundCompleteFlag = " + str(showdownRoundCompleteFlag))
+        Logger.info("showdownRoundCompleteFlag = " +
+                    str(showdownRoundCompleteFlag))
 
         if showdownCompleteFlag is True:
             Logger.info("DEBUGGING checks for showdown winner")
@@ -2042,7 +2090,7 @@ class Game_Screen(Screen):
                     if Configed_Bool("General", "sound") is True:
                         self.clunk_sound.play()
                     self.hand[self.gameState["chicago"]]["score"] = (
-                            self.hand[self.gameState["chicago"]]["score"] - 15
+                        self.hand[self.gameState["chicago"]]["score"] - 15
                     )
                     self.stats["player"][self.gameState["chicago"]][
                         "chicagoLosses"
@@ -2057,7 +2105,8 @@ class Game_Screen(Screen):
                 else:
                     winner = self.gameState["chicago"]
                     if (
-                            Get_Config_Bool(self.setConfig["chicagoTwo"]) is True
+                            Get_Config_Bool(
+                                self.setConfig["chicagoTwo"]) is True
                             and self.gameState["activeCard"][1] == 2
                     ):
                         self.hand[winner]["score"] += 25
@@ -2067,11 +2116,13 @@ class Game_Screen(Screen):
                     self.hand[winner]["chicagoed"] = True
             else:
                 winner = self.gameState["tmpControlPlayer"]
-                Logger.info("Scoring NON-CHICAGO showdown, winner = " + str(winner))
+                Logger.info(
+                    "Scoring NON-CHICAGO showdown, winner = " + str(winner))
                 self.hand[winner]["score"] += 5
                 self.stats["player"][winner]["showdownWins"] += 1
                 if (
-                        Get_Config_Bool(self.setConfig["pokerAfterShowdownScoring"]) is True
+                        Get_Config_Bool(
+                            self.setConfig["pokerAfterShowdownScoring"]) is True
                         and self.hand[self.currentPlayer]["score"] < 52
                 ):
                     Logger.info("Scoring poker after showdown")
@@ -2083,7 +2134,8 @@ class Game_Screen(Screen):
                     )
             # # SHOWDOWN COMPLETE GLOBAL ROUTINE
             # #check if a player can still discard or not
-            self.B.Set_canDiscard(self.hand, self.setConfig["cardExchangePointsLimit"])
+            self.B.Set_canDiscard(
+                self.hand, self.setConfig["cardExchangePointsLimit"])
             # #DEALER MOVE
             self.dealerPlayer = Get_Next_Player(
                 self.dealerPlayer, len(list(self.hand.keys()))
@@ -2110,7 +2162,7 @@ class Game_Screen(Screen):
                     sdl = self.ids["showDownLabel"]
                     c = self.ids["card0"]
                     self.ids["activeCardImage"].pos = sdl.pos[0] + (sdl.width / 2) - (
-                            c.width / 2
+                        c.width / 2
                     ), sdl.pos[1] + (sdl.height / 2) - (c.height / 2)
                     # #RESET IF GAME IS OVER
                     self.Remove_dCards()
@@ -2128,7 +2180,7 @@ class Game_Screen(Screen):
                     for index in range(0, self.setConfig["handCount"]):
                         smallCard = self.ids[
                             "p" + str(playerNum) + "c" + str(index) + "Image"
-                            ]
+                        ]
                         anim = Animation(
                             x=self.xpos_center,
                             y=0 - smallCard.height * 10,
@@ -2148,9 +2200,11 @@ class Game_Screen(Screen):
                 duration = 0.5
             for index in range(0, self.setConfig["handCount"]):
                 card = self.ids["card" + str(index)]
-                doneAnim = Animation(x=int(self.xpos_center), y=0 - yOffset, d=duration)
+                doneAnim = Animation(
+                    x=int(self.xpos_center), y=0 - yOffset, d=duration)
                 doneAnim.start(card)
-            acAnim = Animation(x=int(self.xpos_center), y=0 - yOffset, d=duration)
+            acAnim = Animation(x=int(self.xpos_center),
+                               y=0 - yOffset, d=duration)
             acAnim.bind(on_complete=Now_Small_Cards)
             acAnim.start(self.ids["activeCardImage"])
             return False
@@ -2283,7 +2337,7 @@ class Game_Screen(Screen):
             for index in self.hand[playerNum]["posindex"]:
                 dCard = self.ids[
                     "p" + str(playerNum) + "c" + str(index) + "DiscardImage"
-                    ]
+                ]
                 dCard.source = self.cardSmallBackImagePath
                 animDiscard = Animation(x=xPos, y=yPos, t="in_out_quad")
                 animDiscard.start(dCard)
@@ -2304,9 +2358,10 @@ class Game_Screen(Screen):
                 continue
             tmpList.append(scatterID)
             lastScatter = scatterID
-        Logger.info("lastScatter = " + str(lastScatter) + ", tmpList = " + str(tmpList))
+        Logger.info("lastScatter = " + str(lastScatter) +
+                    ", tmpList = " + str(tmpList))
 
-        ##copy the currentPlayer so when we return after changig it, we continue with original value
+        # copy the currentPlayer so when we return after changig it, we continue with original value
         cPlayer = copy(self.currentPlayer)
 
         def nextTurn(a, w):
@@ -2318,7 +2373,8 @@ class Game_Screen(Screen):
 
         # #if cPlayers hand is all DONE then just proceed to the next turn
         if not tmpList:
-            Logger.info("Current Player " + str(cPlayer) + " has all DONE cards")
+            Logger.info("Current Player " + str(cPlayer) +
+                        " has all DONE cards")
             nextTurn(None, None)
             return False
 
@@ -2377,7 +2433,7 @@ class Game_Screen(Screen):
                 # small dis card :)
                 dCard = self.ids[
                     "p" + str(cPlayer) + "c" + str(dStackPos) + "DiscardImage"
-                    ]
+                ]
                 _popToTop(dCard)
                 # set the correct card picture and move into view
                 dCard.source = self.cardFilePath + "/" + faceUp[1]
@@ -2390,7 +2446,8 @@ class Game_Screen(Screen):
             elif self.hand[cPlayer]["cpu"] is False:
                 anim = Animation(x=int(self.xpos_center), y=0, d=0.2)
                 if newPlayer != cPlayer:
-                    anim = anim + Animation(x=int(self.xpos_center), y=y, d=0.3)
+                    anim = anim + \
+                        Animation(x=int(self.xpos_center), y=y, d=0.3)
                     anim.bind(on_complete=return_smallcards)
                 elif (
                         index
@@ -2404,7 +2461,8 @@ class Game_Screen(Screen):
         if Get_Config_Bool(self.setConfig["viewDiscards"]) is True:
             for index in range(0, len(self.hand[cPlayer]["posindex"])):
                 _popToTop(
-                    self.ids["p" + str(cPlayer) + "c" + str(index) + "DiscardImage"]
+                    self.ids["p" + str(cPlayer) + "c" +
+                             str(index) + "DiscardImage"]
                 )
         elif dCard is not None:
             _popToTop(dCard)

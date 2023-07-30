@@ -1,3 +1,14 @@
+from kivy.properties import ObjectProperty
+from kivy.utils import platform
+from kivy.core.image import Image as CoreImage
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.screenmanager import ScreenManager, FadeTransition
+from kivy.logger import Logger
+from kivy.app import App
+from screens.Game_Over_Screen import Game_Over_Screen
+from screens.Shop_Screen import Shop_Screen
+from screens.Menu_Screen import Menu_Screen
+from screens.Game_Screen import Game_Screen
 import _pickle as cPickle
 import io
 from builtins import int
@@ -9,18 +20,6 @@ from kivy.uix.settings import SettingsWithTabbedPanel
 
 kivy.require("2.2.1")
 
-from screens.Game_Screen import Game_Screen
-from screens.Menu_Screen import Menu_Screen
-from screens.Shop_Screen import Shop_Screen
-from screens.Game_Over_Screen import Game_Over_Screen
-
-from kivy.app import App
-from kivy.logger import Logger
-from kivy.uix.screenmanager import ScreenManager, FadeTransition
-from kivy.uix.floatlayout import FloatLayout
-from kivy.core.image import Image as CoreImage
-from kivy.utils import platform
-from kivy.properties import ObjectProperty
 
 __version__ = "2.0"
 paidApp = True
@@ -45,15 +44,19 @@ class ChicagoApp(App):
         # fix for old file locations
         if platform == "android":
             if (
-                    isfile(App.get_running_app().user_data_dir + "/game.dat") is False
+                    isfile(App.get_running_app().user_data_dir +
+                           "/game.dat") is False
                     and isfile("./game.dat") is True
             ):
-                rename("./game.dat", App.get_running_app().user_data_dir + "/game.dat")
+                rename("./game.dat",
+                       App.get_running_app().user_data_dir + "/game.dat")
             if (
-                    isfile(App.get_running_app().user_data_dir + "/shop.dat") is False
+                    isfile(App.get_running_app().user_data_dir +
+                           "/shop.dat") is False
                     and isfile("./shop.dat") is True
             ):
-                rename("./shop.dat", App.get_running_app().user_data_dir + "/shop.dat")
+                rename("./shop.dat",
+                       App.get_running_app().user_data_dir + "/shop.dat")
         # Cache all the card images
         for path in ("./images/PNG-cards-1.3", "./images/back"):
             for f in listdir(path):
@@ -116,7 +119,7 @@ class ChicagoApp(App):
     #                               size_hint=(0.5,0.5))
     #                 popup.open()
 
-    ##Pause mode - http://kivy.org/docs/api-kivy.app.html#pause-mode
+    # Pause mode - http://kivy.org/docs/api-kivy.app.html#pause-mode
     def on_pause(self):
         # Here you can save data if needed
         return True
@@ -135,7 +138,8 @@ class ChicagoApp(App):
             # pInfo[index] = {'name': 'Player' + str(index), 'cpu': False}
             pInfo[index] = {
                 "name": config.getdefault(
-                    "Players", "PlayerCount" + str(index), "Player" + str(index)
+                    "Players", "PlayerCount" +
+                    str(index), "Player" + str(index)
                 ),
                 "cpu": config.getdefault("Players", "p" + str(index) + "CPU", False),
             }
@@ -146,21 +150,29 @@ class ChicagoApp(App):
             players=pInfo,
             chicagoTwo=config.getdefault("Varients", "chicagoTwo", True),
             rounds=int(config.getdefault("Varients", "roundCount", "2")),
-            pokerRoundScoring=config.getdefault("Varients", "pokerRoundScoring", False),
+            pokerRoundScoring=config.getdefault(
+                "Varients", "pokerRoundScoring", False),
             pokerAfterShowdownScoring=config.getdefault(
                 "Varients", "pokerAfterShowdownScoring", True
             ),
             cardExchangePointsLimit=config.getdefault(
                 "Varients", "cardExchangePointsLimit", "46"
             ),
-            negativeScoring=config.getdefault("Varients", "negativeScoring", True),
-            fourOfaKindReset=config.getdefault("Varients", "fourOfaKindReset", False),
+            negativeScoring=config.getdefault(
+                "Varients", "negativeScoring", True),
+            fourOfaKindReset=config.getdefault(
+                "Varients", "fourOfaKindReset", False),
             viewDiscards=config.getdefault("Varients", "viewDiscards", True),
-            chicagoDestroy=config.getdefault("Varients", "chicagoDestroy", False),
-            Player1="{:<6}".format(config.getdefault("Players", "Player1", False)),
-            Player2="{:<6}".format(config.getdefault("Players", "Player2", False)),
-            Player3="{:<6}".format(config.getdefault("Players", "Player3", False)),
-            Player4="{:<6}".format(config.getdefault("Players", "Player4", False)),
+            chicagoDestroy=config.getdefault(
+                "Varients", "chicagoDestroy", False),
+            Player1="{:<6}".format(config.getdefault(
+                "Players", "Player1", False)),
+            Player2="{:<6}".format(config.getdefault(
+                "Players", "Player2", False)),
+            Player3="{:<6}".format(config.getdefault(
+                "Players", "Player3", False)),
+            Player4="{:<6}".format(config.getdefault(
+                "Players", "Player4", False)),
             p1CPU=config.getdefault("Players", "p1CPU", False),
             p2CPU=config.getdefault("Players", "p2CPU", False),
             p3CPU=config.getdefault("Players", "p3CPU", False),
@@ -229,7 +241,8 @@ class ChicagoApp(App):
     def build_settings(self, settings):
         Logger.info("build_settings FIRED")
         with open("settings.json", "r") as settings_json:
-            settings.add_json_panel("Settings", self.config, data=settings_json.read())
+            settings.add_json_panel(
+                "Settings", self.config, data=settings_json.read())
 
 
 if __name__ == "__main__":
