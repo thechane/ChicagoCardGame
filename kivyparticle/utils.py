@@ -2,7 +2,7 @@
 
 import random
 
-__all__ = ['random_variance', 'random_color_variance']
+__all__ = ["random_variance", "random_color_variance"]
 
 
 def random_variance(base, variance):
@@ -10,4 +10,6 @@ def random_variance(base, variance):
 
 
 def random_color_variance(base, variance):
-    return [min(max(0.0, (random_variance(base[i], variance[i]))), 1.0) for i in range(4)]
+    return [
+        min(max(0.0, (random_variance(base[i], variance[i]))), 1.0) for i in range(4)
+    ]
