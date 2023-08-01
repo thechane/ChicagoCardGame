@@ -5,4 +5,5 @@ venv/
 .idea/
 .ropeproject/
 .buildozer/
+bin/
 chicago.ini

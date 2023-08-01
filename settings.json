@@ -35,7 +35,7 @@
         "key": "simplebackground"
     },
     {"type": "bool",
-        "title": "Simple card design - switch on if running older hardware (ignored if you have a design activated from the shop screen)",
+        "title": "Simple card design - switch on if running older hardware",
         "section": "General",
         "key": "simplecardback"
     },

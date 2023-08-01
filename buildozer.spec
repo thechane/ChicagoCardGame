@@ -61,13 +61,13 @@ orientation = landscape, portrait
 #
 
 #
-# author = © Copyright Info
+# author = Stuart Chaney
 
 # change the major version of python used by the app
-osx.python_version = 3
+osx.python_version = 3.11
 
 # Kivy version to use
-osx.kivy_version = 1.9.1
+osx.kivy_version = 2.2.1
 
 #
 # Android specific
@@ -81,7 +81,7 @@ fullscreen = 1
 # red, blue, green, black, white, gray, cyan, magenta, yellow, lightgray,
 # darkgray, grey, lightgrey, darkgrey, aqua, fuchsia, lime, maroon, navy,
 # olive, purple, silver, teal.
-#android.presplash_color = #FFFFFF
+android.presplash_color = magenta
 
 # (string) Presplash animation using Lottie format.
 # see https://lottiefiles.com/ for examples and https://airbnb.design/lottie/
@@ -102,22 +102,26 @@ fullscreen = 1
 
 # (int) Target Android API, should be as high as possible.
 #android.api = 31
+android.api = 34
 
 # (int) Minimum API your APK / AAB will support.
 #android.minapi = 21
+android.minapi = 21
 
 # (int) Android SDK version to use
 #android.sdk = 20
+android.sdk = 34
 
 # (str) Android NDK version to use
 #android.ndk = 23b
+android.ndk = 25c
 
 # (int) Android NDK API to use. This is the minimum API your app will support, it should usually match android.minapi.
 #android.ndk_api = 21
+android.ndk_api = 21
 
 # (bool) Use --private data storage (True) or --dir public storage (False)
 #android.private_storage = True
-android.private_storage = False
 
 # (str) Android NDK directory (if empty, it will be automatically downloaded.)
 #android.ndk_path =
@@ -175,6 +179,7 @@ android.private_storage = False
 # down the build process. Allows wildcards matching, for example:
 # OUYA-ODK/libs/*.jar
 #android.add_jars = foo.jar,bar.jar,path/to/more/*.jar
+#android.add_jars = %(source.dir)s/libs/*.jar
 
 # (list) List of Java files to add to the android project (can be java or a
 # directory containing the files)

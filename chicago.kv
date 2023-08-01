@@ -1,47 +1,47 @@
-<Shop_Screen>:
-    name: 'shopScreen'
-    CustomLayout:
-        id: shopFullScreen
-        Image:
-            source: './images/greenTable.jpg'
-            allow_stretch: True
-            keep_ratio: False
-	BoxLayout:
-		id: outerShopBL
-	    orientation: 'vertical'
-	    Label:
-	        size_hint: 1, 0.2
-	    Label:
-	        id: shopHeading
-	        text: "Chicago Shop"
-	        size_hint: 1, 0.05
-	        font_name: './fonts/BrokenGlass.ttf'
-	        font_size: self.width * 0.08
-	    Label:
-	        size_hint: 1, 0.2
-	    BoxLayout:
-	    	orientation: 'horizontal'
-	    	Label:
-	        	size_hint: 0.02, 1
-		    GridLayout:
-		    	size_hint: 0.8, 1
-		    	id: innerShopGL
-		    	cols: 3
-	    	Label:
-	        	size_hint: 0.02, 1
-	    BoxLayout:
-	        orientation: 'horizontal'
-	        Label:
-	            size_hint: 0.4, 0.3
-	        Button:
-	            id: shopCloseButton
-	            text: 'Back'
-	            size_hint: 0.2, 0.2
-	            on_press: root.manager.current = 'menuScreen'
-	        Label:
-	            size_hint: 0.4, 0.3
-	    Label:
-	        size_hint: 1, 0.2
+#<Shop_Screen>:
+#    name: 'shopScreen'
+#    CustomLayout:
+#        id: shopFullScreen
+#        Image:
+#            source: './images/greenTable.jpg'
+#            allow_stretch: True
+#            keep_ratio: False
+#	BoxLayout:
+#		id: outerShopBL
+#	    orientation: 'vertical'
+#	    Label:
+#	        size_hint: 1, 0.2
+#	    Label:
+#	        id: shopHeading
+#	        text: "Chicago Shop"
+#	        size_hint: 1, 0.05
+#	        font_name: './fonts/BrokenGlass.ttf'
+#	        font_size: self.width * 0.08
+#	    Label:
+#	        size_hint: 1, 0.2
+#	    BoxLayout:
+#	    	orientation: 'horizontal'
+#	    	Label:
+#	        	size_hint: 0.02, 1
+#		    GridLayout:
+#		    	size_hint: 0.8, 1
+#		    	id: innerShopGL
+#		    	cols: 3
+#	    	Label:
+#	        	size_hint: 0.02, 1
+#	    BoxLayout:
+#	        orientation: 'horizontal'
+#	        Label:
+#	            size_hint: 0.4, 0.3
+#	        Button:
+#	            id: shopCloseButton
+#	            text: 'Back'
+#	            size_hint: 0.2, 0.2
+#	            on_press: root.manager.current = 'menuScreen'
+#	        Label:
+#	            size_hint: 0.4, 0.3
+#	    Label:
+#	        size_hint: 1, 0.2
 <Game_Over_Screen>:
     name: 'gameOverScreen'
     on_enter: root.Game_OverScreen_Load()
@@ -175,12 +175,12 @@
                 text: 'Settings'
                 font_size: self.width * 0.17
                 on_press: app.get_running_app().open_settings()
-            Button:
-            	id: shopButton
-                text: 'Shop'
-                font_size: self.width * 0.17
-                on_press: root.manager.current = 'shopScreen'
-                #on_press: root.Show_Shop()
+#            Button:
+#            	id: shopButton
+#                text: 'Shop'
+#                font_size: self.width * 0.17
+#                on_press: root.manager.current = 'shopScreen'
+#                #on_press: root.Show_Shop()
             Button:
             	id: aboutButton
                 text: 'About'

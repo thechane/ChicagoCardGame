@@ -233,22 +233,12 @@ class Game_Screen(Screen):
                 anim.start(card)
 
     def Check_Graphics(self):
-        Logger.info(
-            "Check_Graphics FIRED, shopCard = "
-            + str(App.get_running_app().root.shopCard)
-        )
+        Logger.info("Check_Graphics FIRED")
         if Configed_Bool("General", "simplebackground") is True:
             self.ids["backGroundImage"].source = "./images/simpleTable.jpg"
         else:
             self.ids["backGroundImage"].source = "./images/greenTable.jpg"
-        if App.get_running_app().root.shopCard is not None:
-            self.cardSmallBackImagePath = (
-                "./images/back/" + App.get_running_app().root.shopCard + "_small.png"
-            )
-            self.cardBackImagePath = (
-                "./images/back/" + App.get_running_app().root.shopCard + ".png"
-            )
-        elif Configed_Bool("General", "simplecardback") is True:
+        if Configed_Bool("General", "simplecardback") is True:
             self.cardSmallBackImagePath = "./images/back/simpleback_small.png"
             self.cardBackImagePath = "./images/back/simpleback.png"
         else:

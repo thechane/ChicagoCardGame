@@ -6,13 +6,13 @@ from kivy.uix.screenmanager import ScreenManager, FadeTransition
 from kivy.logger import Logger
 from kivy.app import App
 from screens.Game_Over_Screen import Game_Over_Screen
-from screens.Shop_Screen import Shop_Screen
+# from bak.Shop_Screen import Shop_Screen
 from screens.Menu_Screen import Menu_Screen
 from screens.Game_Screen import Game_Screen
 import _pickle as cPickle
 import io
 from builtins import int
-from os import listdir, remove, environ, rename
+from os import listdir, remove, rename
 from os.path import isfile
 
 import kivy
@@ -21,13 +21,13 @@ from kivy.uix.settings import SettingsWithTabbedPanel
 kivy.require("2.2.1")
 
 
-__version__ = "2.0"
-paidApp = True
-try:
-    if environ["FREE"] == "0":
-        paidApp = True
-except Exception as e:
-    Logger.info("Unable to query ENV var FREE: " + str(e))
+__version__ = "2.1"
+# paidApp = True
+# try:
+#     if environ["FREE"] == "0":
+#         paidApp = True
+# except Exception as e:
+#     Logger.info("Unable to query ENV var FREE: " + str(e))
 
 
 class CustomLayout(FloatLayout):
@@ -43,20 +43,8 @@ class ChicagoApp(App):
         super(ChicagoApp, self).__init__(**kwargs)
         # fix for old file locations
         if platform == "android":
-            if (
-                    isfile(App.get_running_app().user_data_dir +
-                           "/game.dat") is False
-                    and isfile("./game.dat") is True
-            ):
-                rename("./game.dat",
-                       App.get_running_app().user_data_dir + "/game.dat")
-            if (
-                    isfile(App.get_running_app().user_data_dir +
-                           "/shop.dat") is False
-                    and isfile("./shop.dat") is True
-            ):
-                rename("./shop.dat",
-                       App.get_running_app().user_data_dir + "/shop.dat")
+            if not isfile(f"{App.get_running_app().user_data_dir}/game.dat") and isfile("./game.dat"):
+                rename("./game.dat", f"{App.get_running_app().user_data_dir}/game.dat")
         # Cache all the card images
         for path in ("./images/PNG-cards-1.3", "./images/back"):
             for f in listdir(path):
@@ -70,54 +58,15 @@ class ChicagoApp(App):
 
     def build(self):
         Logger.info("build FIRED")
-        self.noAds = True
         sm = ScreenManager()
         sm.add_widget(Menu_Screen(name="menuScreen"))
-        sm.add_widget(Shop_Screen(name="shopScreen"))
         sm.add_widget(Game_Over_Screen(name="gameOverScreen"))
         self.settings_cls = SettingsWithTabbedPanel
         self.use_kivy_settings = False
-        # shop data section
-        sm.shopCard = None
-        shopData = None
-        if platform == "android":
-            if isfile(App.get_running_app().user_data_dir + "/shop.dat") is True:
-                Logger.info("Reading in in shop.dat")
-                try:
-                    f = open(App.get_running_app().user_data_dir + "/shop.dat")
-                    shopData = cPickle.load(f)
-                    f.close()
-                except Exception as e:
-                    Logger.info(
-                        "SHOPDATA LOAD FILE ERROR (file will be removed): " + str(e)
-                    )
-                    remove(App.get_running_app().user_data_dir + "/shop.dat")
-            if shopData is not None:
-                for skuSwitchID in shopData:
-                    if "flaggedcards" in skuSwitchID and shopData[skuSwitchID] is True:
-                        flagname = skuSwitchID.split(".")[-1]
-                        flagname = flagname.split("_")[0]
-                        sm.shopCard = flagname
-                        break
-
         return sm
 
     def on_start(self):
         Logger.info("on_start FIRED")
-        # self.show_ads()
-
-    # def show_ads(self, *args):
-    #     if self.noAds is False:
-    #         if platform == "android":
-    #             AdBuddiz.showAd(PythonActivity.mActivity)
-    #         elif platform == "ios":
-    #             Ad.showAd()
-    #         else:
-    #             pass
-    #                 popup = Popup(title='Advertise',
-    #                               content=Label(text='Here'),
-    #                               size_hint=(0.5,0.5))
-    #                 popup.open()
 
     # Pause mode - http://kivy.org/docs/api-kivy.app.html#pause-mode
     def on_pause(self):
