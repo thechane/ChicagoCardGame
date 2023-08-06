@@ -4,7 +4,7 @@ from random import randint
 
 from kivy.animation import Animation
 from kivy.clock import Clock
-from kivy.logger import Logger  # , LoggerHistory
+from kivy.logger import Logger
 
 from brains.Common import Widget_ToTop, Configed_Bool
 

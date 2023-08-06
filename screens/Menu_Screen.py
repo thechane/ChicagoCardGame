@@ -1,4 +1,3 @@
-import _pickle as cPickle
 import webbrowser
 from os import remove
 from os.path import isfile

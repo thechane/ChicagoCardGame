@@ -6,22 +6,26 @@ from kivy.uix.screenmanager import ScreenManager, FadeTransition
 from kivy.logger import Logger
 from kivy.app import App
 from screens.Game_Over_Screen import Game_Over_Screen
-# from bak.Shop_Screen import Shop_Screen
 from screens.Menu_Screen import Menu_Screen
 from screens.Game_Screen import Game_Screen
-import _pickle as cPickle
 import io
 from builtins import int
-from os import listdir, remove, rename
+from os import listdir, rename
 from os.path import isfile
 
 import kivy
 from kivy.uix.settings import SettingsWithTabbedPanel
 
-kivy.require("2.2.1")
+kivy.require("2.2.0")
 
 
 __version__ = "2.1"
+import pkg_resources
+distributions = pkg_resources.working_set
+Logger.info('------------------------------------------------------')
+for distribution in distributions:
+    Logger.info(f"{distribution.key}=={distribution.version}")
+Logger.info('------------------------------------------------------')
 # paidApp = True
 # try:
 #     if environ["FREE"] == "0":

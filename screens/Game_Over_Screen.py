@@ -1,4 +1,3 @@
-import _pickle as cPickle
 from os import remove
 from os.path import isfile
 
