@@ -634,7 +634,7 @@ class Brain(object):
                 Clock.schedule_once(moveSmallCardsOffScreen, 0.5)
 
         moveSmallCardsOffScreen(None)
-        gsInst.Refocus_Cards()
+        gsInst.refocus_cards()
         return True
 
     def Next_Play(self, gsInst):

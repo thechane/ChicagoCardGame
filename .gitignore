@@ -1,10 +1,4 @@
-.DS_store
 .vscode/
 */__pycache__/
-kivy_venv/
-venv/
+.venv/
 .idea/
-.ropeproject/
-.buildozer/
-bin/
-chicago.ini
