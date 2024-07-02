@@ -215,16 +215,13 @@ class Game_Screen(Screen):
                 anim = Animation(x=self.xpos_home[sID], y=0 - card.height, t='in_out_quad')
                 anim.start(card)
 
-    def Check_Graphics(self):
-        Logger.info('Check_Graphics FIRED, shopCard = ' + str(App.get_running_app().root.shopCard))
+    def check_graphics(self):
+        Logger.info('check_graphics FIRED')
         if Configed_Bool("General", "simplebackground") is True:
             self.ids['backGroundImage'].source = './images/simpleTable.jpg'
         else:
             self.ids['backGroundImage'].source = './images/greenTable.jpg'
-        if App.get_running_app().root.shopCard is not None:
-            self.cardSmallBackImagePath = './images/back/' + App.get_running_app().root.shopCard + '_small.png'
-            self.cardBackImagePath = './images/back/' + App.get_running_app().root.shopCard + '.png'
-        elif Configed_Bool("General", "simplecardback") is True:
+        if Configed_Bool("General", "simplecardback") is True:
             self.cardSmallBackImagePath = './images/back/simpleback_small.png'
             self.cardBackImagePath = './images/back/simpleback.png'
         else:
@@ -238,7 +235,7 @@ class Game_Screen(Screen):
 
     def on_enter(self):
         Logger.info('on_enter FIRED')
-        self.Check_Graphics()
+        self.check_graphics()
         iF = self.ids['infoFloat']
         tI = self.ids['tableImage']
         if Configed_Bool("General", "table") is True and tI not in iF.children:
@@ -447,7 +444,7 @@ class Game_Screen(Screen):
             tmpIndex.append(index)
 
         # #ensure we know the graphic settings first
-        self.Check_Graphics()
+        self.check_graphics()
         # #then reset the data
         for index in range(1, playerCount):
             cpu = False

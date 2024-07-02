@@ -132,7 +132,7 @@ class Menu_Screen(Screen):
                 f = open(App.get_running_app().user_data_dir + "/game.dat")
                 gameData = cPickle.load(f)
                 f.close()
-                App.get_running_app().New_Game(gameData)
+                App.get_running_app().new_game(gameData)
             except Exception as e:
                 Logger.info("GAMEDATA FILE ERROR: " + str(e))
                 try:
@@ -164,7 +164,7 @@ class Menu_Screen(Screen):
             menuScroller.remove_widget(box)
 
             def done_dAnim(anim, widget):
-                App.get_running_app().New_Game(None)
+                App.get_running_app().new_game(None)
                 return True
 
             dAnim = Animation(x=0, y=0, d=0.2)
@@ -213,4 +213,4 @@ class Menu_Screen(Screen):
         ):
             aAmin.start(menuScroller)
         else:
-            App.get_running_app().New_Game(None)
+            App.get_running_app().new_game(None)

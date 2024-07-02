@@ -38,7 +38,7 @@ class Game_Over_Screen(Screen):
                 f = open(App.get_running_app().user_data_dir + "/game.dat")
                 gameData = cPickle.load(f)
                 f.close()
-                self.parent.New_Game(gameData)
+                self.parent.new_game(gameData)
             except Exception as e:
                 Logger.info("GAMEDATA FILE ERROR: " + str(e))
         try:
