@@ -62,6 +62,8 @@ class Game_Screen(Screen):
     viewDiscards = BooleanProperty(False)
 
     def __init__(self, **kwargs):  # #Override Screen's constructor
+        self.pressed_up = None
+        self.pressed_down = None
         Logger.info('Game_Screen init Fired')
         super(Game_Screen, self).__init__(**kwargs)
         self.init = True  # #Is false until first Main_Float_Resize (delayed) fires
@@ -133,7 +135,7 @@ class Game_Screen(Screen):
         if kwargs.get('gameData') is None:
             Logger.info('------------NEWGAME------------')
             kwargs['nextTurn'] = True
-            self.Reset_Game(kwargs)
+            self.reset_game(kwargs)
         else:
             # Import saved data that's taken at the start of each human player End_Turn call
             self.hand = kwargs.get('gameData')['hand']
@@ -248,10 +250,10 @@ class Game_Screen(Screen):
             Logger.info('table image removed')
             iF.remove_widget(tI)
         if self.holdIt is True:
-            def unHoldit(dt):
+            def unholdit(dt):
                 self.holdIt = False
 
-            Clock.schedule_once(unHoldit, 2)
+            Clock.schedule_once(unholdit, 2)
         if self.hand[self.current_player]['cpu'] is False and self.init is False:
             for sid in self.hand[self.current_player]['posindex']:
                 if self.hand[self.current_player]['cardid'][sid] == 'DONE':
@@ -297,7 +299,7 @@ class Game_Screen(Screen):
             return ("... wait for the CPU players\n"
                     "to finish their turns")
         elif self.gameState['controlPlayer'] is None:
-            if self.hand[self.current_player]['canDiscard'] is False:
+            if self.hand[self.current_player]['can_discard'] is False:
                 return ("You can't exchange cards with\n"
                         "this many points - hit End Turn")
             elif self.gameState['roundNumber'] == self.setConfig['pokerRoundCount']:
@@ -351,8 +353,9 @@ class Game_Screen(Screen):
 
     def show_tutorial(self, **kwargs):
         tutorials = (
-        'start', 'poker1', 'poker2', 'poker3', 'poker4', 'chicagoQuestion', 'showdownStart',
-        'showdownEnd')
+            'start', 'poker1', 'poker2', 'poker3', 'poker4', 
+            'chicagoQuestion', 'showdownStart', 'showdownEnd'
+        )
         Logger.info('show_tutorial FIRED from ' + str(inspect.stack()[2][3]) + '(' + str(
             inspect.stack()[2][2]) + ') - kwargs = ' + str(kwargs))
         tfile = "./tutorial/help.markup"
@@ -371,10 +374,10 @@ class Game_Screen(Screen):
             Logger.error(f'tutorial widgets already present?: {e}')
         with open(tfile, "r") as myfile:
             data = myfile.read()
-        if (Metrics.dpi_rounded >= 320 and self.portrait is False):
+        if Metrics.dpi_rounded >= 320 and self.portrait is False:
             data = data.replace('TITLESIZE', str("15sp"))
             data = data.replace('NORMALSIZE', str("14sp"))
-        elif (Metrics.dpi_rounded >= 320):
+        elif Metrics.dpi_rounded >= 320:
             data = data.replace('TITLESIZE', str("14sp"))
             data = data.replace('NORMALSIZE', str("13sp"))
         else:
@@ -387,11 +390,11 @@ class Game_Screen(Screen):
             self.ids['tutorialLabel'].bind(on_ref_press=Goto_Link)
             self.tutorialRefPress = True
 
-    def Reset_Game(self, kwargs):
+    def reset_game(self, kwargs):
         try:
             playerInfo = kwargs.get('players')
             playerCount = kwargs.get('playerCount')
-        except:
+        except Exception as _e:
             playerInfo = None
             playerCount = None
         Logger.info('-----------------RESET FIRED---------------------' + str(kwargs))
@@ -412,11 +415,11 @@ class Game_Screen(Screen):
         # #Set up stats, if we can increment we're in business, otherwise init the data
         try:
             self.stats['plays'] += 1
-        except:
+        except Exception as _e:
             self.stats['player'] = {}
             self.stats['plays'] = 0
-            for pNum in range(1, playerCount):
-                self.stats['player'][pNum] = {
+            for pnum in range(1, playerCount):
+                self.stats['player'][pnum] = {
                     'pokerWins': 0,
                     'highestPokerHand': 0,
                     'showdownWins': 0,
@@ -424,8 +427,8 @@ class Game_Screen(Screen):
                     'chicagoLosses': 0
                 }
 
-        # self.discardNumber = {1: [], 2: []}        ## dictionary of list of discarded card numbers (per round, by player number)
-        self.discardNumber = {}
+        # self.discardNumber = {1: [], 2: []}   dictionary of list of discarded card numbers 
+        self.discardNumber = {}  # (per round, by player number)
         self.pressed_down = ListProperty([0, 0])
         self.pressed_up = ListProperty([0, 0])
         self.B.playerCantPlaySuit = (
@@ -434,8 +437,8 @@ class Game_Screen(Screen):
             [],
             []
         )
-        tmpHand = []
-        tmpIndex = []
+        tmp_hand = []
+        tmp_index = []
 
         if playerCount is None:  # new game
             playerCount = len(self.hand) + 1
@@ -443,8 +446,8 @@ class Game_Screen(Screen):
             self.hand = {}
 
         for index in range(0, self.setConfig['handCount']):
-            tmpHand.append(None)
-            tmpIndex.append(index)
+            tmp_hand.append(None)
+            tmp_index.append(index)
 
         # #ensure we know the graphic settings first
         self.check_graphics()
@@ -454,29 +457,29 @@ class Game_Screen(Screen):
             try:
                 if int(kwargs.get('p' + str(index) + 'CPU')) == 1:
                     cpu = True
-            except:
+            except Exception as _e:
                 pass
 
             name = kwargs.get('Player' + str(index))
             score = 0
-            canDiscard = True
+            can_discard = True
             if playerInfo is None:
                 cpu = self.hand[index]['cpu']
                 name = self.hand[index]['name']
-                canDiscard = self.hand[index]['canDiscard']
+                can_discard = self.hand[index]['can_discard']
             try:
                 score = self.hand[index]['score']
             except:
                 pass
 
-            self.hand[index] = {'cardid': copy(tmpHand),
-                                'posindex': copy(tmpIndex),
+            self.hand[index] = {'cardid': copy(tmp_hand),
+                                'posindex': copy(tmp_index),
                                 'hand': None,  # #Name of hand (straight, pair...)
                                 'showDownDiscards': [],  # #stored cards discarded in the showdown
                                 'handScore': (0, 0, 0),
                                 # #score, highcard value, highcard suitvalue
                                 'score': score,  # #actual Chicago points total
-                                'canDiscard': canDiscard,
+                                'can_discard': can_discard,
                                 'cpu': cpu,
                                 'chicagoed': False,
                                 'roundCount': 0,  # #how many poker rounds this player has done
@@ -1167,7 +1170,7 @@ class Game_Screen(Screen):
         for index in self.hand:
             Logger.info('HAND for player : ' + self.hand[index]['name'])
             Logger.info(str(self.hand[index]['cardid']))
-            Logger.info("can discard = " + str(self.hand[index]['canDiscard']))
+            Logger.info("can discard = " + str(self.hand[index]['can_discard']))
             # Logger.info(str(self.hand[index]['posindex']))
             # Logger.info('showDownDiscards = ' + str(self.hand[index]['showDownDiscards']))
             # Logger.info('roundCount = ' + str(self.hand[index]['roundCount']))
@@ -1292,7 +1295,7 @@ class Game_Screen(Screen):
 
     def Discard_Card(self, scatterID):
         Logger.info('Discard_Card fired')
-        if self.hand[self.current_player]['canDiscard'] is False:
+        if self.hand[self.current_player]['can_discard'] is False:
             self.flash_box("No more discards allowed\nonce score is at or above " + str(
                 self.setConfig['cardExchangePointsLimit']))
             self.Center_Pos(scatterID)
@@ -1579,7 +1582,7 @@ class Game_Screen(Screen):
                 pass
         except:
             # #If this check fails that screen has terminated
-            self.Reset_Game({'nextTurn': False, 'killGame': True})
+            self.reset_game({'nextTurn': False, 'killGame': True})
             self.clear_widgets()
             return False
         # #Prevents ending turn with no cards assigned
@@ -1777,20 +1780,19 @@ class Game_Screen(Screen):
                         Get_Config_Bool(self.setConfig['fourOfaKindReset']),
                         self.stats
                     )
-            # # SHOWDOWN COMPLETE GLOBAL ROUTINE
-            # #check if a player can still discard or not
-            self.B.Set_canDiscard(self.hand, self.setConfig['cardExchangePointsLimit'])
-            # #DEALER MOVE
+            # SHOWDOWN COMPLETE GLOBAL ROUTINE
+            # check if a player can still discard or not
+            self.B.set_can_discard(self.hand, self.setConfig['cardExchangePointsLimit'])
+            # DEALER MOVE
             self.dealerPlayer = Get_Next_Player(self.dealerPlayer, len(list(self.hand.keys())))
             self.Move_Dealer_Chip()
             self.Update_Player_Circle()
             Logger.info('new dealer pos is player: ' + str(
-                self.dealerPlayer))  # + 'pos: ' +  str(self.dealerPos[int(self.dealerPlayer) - 1][0]) + ', ' + str(self.dealerPos[int(self.dealerPlayer) - 1][1]))
+                self.dealerPlayer))
             # #SHOW WINNER
             tmpText = ' wins_the showdown'
             self.Fun_Text(self.B.Strip_Player(self.hand[winner]['name']) + tmpText, winner,
                           'yellow', 2.5)
-            newPlayer = copy(self.dealerPlayer)
 
             def Now_Small_Cards(a, w):
 
@@ -1806,9 +1808,9 @@ class Game_Screen(Screen):
                     if check_winner() is False:
                         Logger.info('---------------Resetting game with current player ' + str(
                             self.current_player) + '----------------')
-                        self.Reset_Game({'nextTurn': True})
+                        self.reset_game({'nextTurn': True})
                     else:
-                        self.Reset_Game({'nextTurn': False})
+                        self.reset_game({'nextTurn': False})
 
                 for playerNum in self.hand:
                     for index in range(0, self.setConfig['handCount']):
@@ -1922,7 +1924,7 @@ class Game_Screen(Screen):
                 self.gameState['chicago'] = -2  # #set to denote decision round has started
 
         if check_winner() is True:
-            self.Reset_Game({'nextTurn': False})
+            self.reset_game({'nextTurn': False})
             return False
 
         # #Update the circle to reflect new info

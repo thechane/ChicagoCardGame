@@ -111,12 +111,12 @@ class Brain(object):
         else:
             return ("HIGH_CARD", highCard[0], highCard, splitHand)
 
-    def Set_canDiscard(self, hand, cardExchangePointsLimit):
+    def set_can_discard(self, hand, cardExchangePointsLimit):
         for pNum in hand:
             if int(hand[pNum]["score"]) >= int(cardExchangePointsLimit):
-                hand[pNum]["canDiscard"] = False
+                hand[pNum]["can_discard"] = False
             else:
-                hand[pNum]["canDiscard"] = True
+                hand[pNum]["can_discard"] = True
 
     def Score_Hand(self, hand, straightFlushValue, fourKindToZero, stats):
         for playerNum in hand:
@@ -722,7 +722,7 @@ class Brain(object):
 
                 # get dicarded cards
                 discardList = None
-                if gsInst.hand[cPlayer]["canDiscard"] is False:
+                if gsInst.hand[cPlayer]["can_discard"] is False:
                     # Powerless - end turn
                     discardList = []
                 elif Poker_Change_With_handID() is True:
