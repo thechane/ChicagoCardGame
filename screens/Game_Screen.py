@@ -1,30 +1,26 @@
+import random
+import gc
+import inspect
+import _pickle as cpickle
+from os import listdir
+from os.path import isfile, join
+from copy import copy
 from kivy.uix.screenmanager import Screen
 from kivy.animation import Animation
 from kivy.uix.image import Image
-from kivy.properties import ListProperty, StringProperty, NumericProperty, ObjectProperty, \
-    BooleanProperty
 from kivy.core.audio import SoundLoader
 from kivy.app import App
 from kivy.logger import Logger
 from kivy.clock import Clock
 from kivy.metrics import Metrics, inch
-
-from os import listdir
-from os.path import isfile, join
-import random
-from copy import copy
-import _pickle as cPickle
-import gc
-
+from kivy.properties import (ListProperty, StringProperty,
+                             NumericProperty, ObjectProperty,
+                             BooleanProperty)
 from brains.Brain import Brain
 from brains.Particle import Particle
-from brains.Common import Widget_ToTop, Get_Next_Player, Get_Config_Bool, Configed_Bool, Goto_Link  # , Debug_Mem
+from brains.Common import (Widget_ToTop, Get_Next_Player,
+                           Get_Config_Bool, Configed_Bool, Goto_Link)
 
-
-# #todo, remove for prod - debugging only
-# import pprint
-# import guppy import hpy
-import inspect
 
 class Game_Screen(Screen):
     # #positional offsets
@@ -54,8 +50,8 @@ class Game_Screen(Screen):
     gameData = ObjectProperty(None)
     handCount = NumericProperty(0)
     negativeScoring = BooleanProperty(False)
-    p1CPU = BooleanProperty(False)
-    p2CPU = BooleanProperty(False)
+    p1CPU = BooleanProperty(True)
+    p2CPU = BooleanProperty(True)
     p3CPU = BooleanProperty(False)
     p4CPU = BooleanProperty(False)
     playerCount = NumericProperty(0)
@@ -67,13 +63,12 @@ class Game_Screen(Screen):
 
     def __init__(self, **kwargs):  # #Override Screen's constructor
         Logger.info('Game_Screen init Fired')
-        super(Game_Screen, self).__init__(**kwargs)  # #but also run parent class constructor (__init__)
-        # self.hp = hpy()                                            ##Memory profiler
+        super(Game_Screen, self).__init__(**kwargs)
         self.init = True  # #Is false until first Main_Float_Resize (delayed) fires
         self.holdIt = True
         self.tutor = None
-        self.boundChicagoButtons = False                            ##prevents binding callback to call / don't call Chicago buttons more than once
-        self.tutorialRefPress = False                               #Prevents multiple bindings for tutorial link refs
+        self.boundChicagoButtons = False  # prevents binding callback to call / don't call Chicago buttons more than once
+        self.tutorialRefPress = False     # Prevents multiple bindings for tutorial link refs
         self.dealingCards = False  # #active when cards are being dealt out
         self.flashTrigger = Clock.create_trigger(self._Flash_Box)
         self.smallCardOffset = (
@@ -117,10 +112,10 @@ class Game_Screen(Screen):
         self.stats['player'] = {}  # #Either None or No, populated during chicago decision round
         self.setConfig = {
             'handCount':                  kwargs.get('handCount'),  # #Number of cards in a hand
-            'pokerRoundCount':            kwargs.get('rounds'),  # #Number of opening poker rounds
-            'pokerRoundScoring':          kwargs.get('pokerRoundScoring'),  # #Score every poker round?
+            'pokerRoundCount':            kwargs.get('rounds'),  # Number of opening poker rounds
+            'pokerRoundScoring':          kwargs.get('pokerRoundScoring'),  # Score every poker rnd?
             'pokerAfterShowdownScoring':  kwargs.get('pokerAfterShowdownScoring'),
-            'chicagoTwo':                 kwargs.get('chicagoTwo'),  # #Score 25 if ending Chicago on a 2
+            'chicagoTwo':                 kwargs.get('chicagoTwo'),  # Score 25 if Chicago on a 2
             'cardExchangePointsLimit':    kwargs.get('cardExchangePointsLimit'),
             'straightFlushValue':         kwargs.get('straightFlushValue'),
             'fourOfaKindReset':           kwargs.get('fourOfaKindReset'),
@@ -130,18 +125,17 @@ class Game_Screen(Screen):
         }  # #Score 8 points if you destroy a chicago
         Logger.info('DEBUG:setConfig:' + str(self.setConfig))
         self.cardFilePath = './images/PNG-cards-1.3'
-        self.files = [ f for f in listdir(self.cardFilePath) if isfile(join(self.cardFilePath, f)) ]  # List of files
+        self.files = [f for f in listdir(self.cardFilePath) if isfile(join(self.cardFilePath, f))]
         try:
             self.B = Brain(winner=kwargs.get('gameData')['winner'])
-        except:
+        except Exception as _e:
             self.B = Brain()
         if kwargs.get('gameData') is None:
             Logger.info('------------NEWGAME------------')
             kwargs['nextTurn'] = True
             self.Reset_Game(kwargs)
-
         else:
-            # #Import saved data that's taken at the start of each human players End_Turn call
+            # Import saved data that's taken at the start of each human player End_Turn call
             self.hand = kwargs.get('gameData')['hand']
             self.gameState = kwargs.get('gameData')['gameState']
             self.currentPlayer = kwargs.get('gameData')['currentPlayer']
@@ -152,23 +146,27 @@ class Game_Screen(Screen):
             self.B.playerCantPlaySuit = kwargs.get('gameData')['brainSuits']
             self.B.winner = kwargs.get('gameData')['winner']
 
-            # #tutorial can not be on unless new game
+            # tutorial cannot be on unless new game
             App.get_running_app().config.set("General", "tutorial", False)
 
             # #adjust game state for the reload
             self.gameState['tmpActiveCard'] = None
             if self.gameState['activeCard'] is not None:
                 self.ids['activeCardImage'].color = [1, 1, 1, 1]
-                self.ids['activeCardImage'].source = self.cardFilePath + '/' + str(self.gameState['activeCard'][1]) + '_of_' + self.gameState['activeCard'][2] + '.png'
-            for pNum in self.hand:
-                for cardNum, cardName in enumerate(self.hand[pNum]['showDownDiscards']):
-                    dCard = self.ids['p' + str(pNum) + 'c' + str(cardNum) + 'DiscardImage']
-                    dCard.source = self.cardFilePath + '/' + cardName
+                self.ids['activeCardImage'].source = (f"{self.cardFilePath}/"
+                                                      f"{self.gameState['activeCard'][1]}_of_"
+                                                      f"{self.gameState['activeCard'][2]}"
+                                                      f".png")
+            for pnum, player in self.hand.items():
+                for cardnum, cardname in enumerate(player['showDownDiscards']):
+                    dcard = self.ids[f'p{pnum}c{cardnum}DiscardImage']
+                    dcard.source = f"{self.cardFilePath}/{cardname}"
             self.gameState['doubleTapConfirm'] = False
             Logger.info('Loaded in game data, current player now ' + str(self.currentPlayer))
-            def nextP(dt):
+
+            def nextp(dt):
                 self.B.Next_Play(self)
-            Clock.schedule_once(nextP, 3)
+            Clock.schedule_once(nextp, 3)
 
     def __del__(self):
         Logger.info('__del__ FIRED')
@@ -516,7 +514,7 @@ class Game_Screen(Screen):
                 }
         try:
             f = open(App.get_running_app().user_data_dir + '/game.dat', 'w')
-            cPickle.dump(data, f)
+            cpickle.dump(data, f)
             f.close()
         except:
             Logger.error('Save_Game Failed')
