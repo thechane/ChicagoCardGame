@@ -568,12 +568,12 @@ class Brain(object):
                     # This ensures if we are in the middle of discarding in a poker round we'll show non discards as face up
                     # which allows the player to continue discarding before a double tap confirm
                     if gsInst.gameState["discardFlag"] is True:
-                        for sID in gsInst.hand[gsInst.currentPlayer]["posindex"]:
-                            if sID not in gsInst.discardNumber[gsInst.currentPlayer]:
+                        for sID in gsInst.hand[gsInst.current_player]["posindex"]:
+                            if sID not in gsInst.discardNumber[gsInst.current_player]:
                                 gsInst.ids["card" + str(sID) + "Image"].source = (
                                     gsInst.cardFilePath
                                     + "/"
-                                    + gsInst.hand[gsInst.currentPlayer]["cardid"][sID]
+                                    + gsInst.hand[gsInst.current_player]["cardid"][sID]
                                 )
                     # if the gameScreen is not current (menu button pushed) force on_leave to fire again so cards
                     # are animated off screen. Prevent cards disappears and then reappearing when gameScreen is made current again.
@@ -599,22 +599,22 @@ class Brain(object):
                 # if all cards are done and there is an active card, we can enable the end turn button
                 if all(
                         item == "DONE"
-                        for item in gsInst.hand[gsInst.currentPlayer]["cardid"]
+                        for item in gsInst.hand[gsInst.current_player]["cardid"]
                 ):
                     gsInst.ids["endTurnButton"].disabled = False
                 else:
                     for toXhomeIndex, scatterID in enumerate(
-                            gsInst.hand[gsInst.currentPlayer]["posindex"]
+                            gsInst.hand[gsInst.current_player]["posindex"]
                     ):
                         if (
-                                gsInst.hand[gsInst.currentPlayer]["cardid"][scatterID]
+                                gsInst.hand[gsInst.current_player]["cardid"][scatterID]
                                 == "DONE"
                         ):
                             continue
                         tmpList.append((toXhomeIndex, scatterID))
                         smallCard = gsInst.ids[
                             "p"
-                            + str(gsInst.currentPlayer)
+                            + str(gsInst.current_player)
                             + "c"
                             + str(scatterID)
                             + "Image"
@@ -639,7 +639,7 @@ class Brain(object):
 
     def Next_Play(self, gsInst):
         # todo - readd save game below
-        cPlayer = copy(gsInst.currentPlayer)
+        cPlayer = copy(gsInst.current_player)
         gsInst.Save_Game()
 
         def _Next_Play():
