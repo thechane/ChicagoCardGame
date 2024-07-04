@@ -39,10 +39,10 @@ class Game_Screen(Screen):
     dCardsize = ListProperty([])  # #Contains the size of the dis Cards
     current_player = NumericProperty(1)  # #current active player
 
-    Player1 = ObjectProperty(None)
-    Player2 = ObjectProperty(None)
-    Player3 = ObjectProperty(None)
-    Player4 = ObjectProperty(None)
+    Player1 = StringProperty(None)
+    Player2 = StringProperty(None)
+    Player3 = StringProperty(None)
+    Player4 = StringProperty(None)
     cardExchangePointsLimit = NumericProperty(0)
     chicagoDestroy = BooleanProperty(False)
     chicagoTwo = BooleanProperty(False)
@@ -211,9 +211,9 @@ class Game_Screen(Screen):
         Logger.info('on_leave FIRED')
         self.holdIt = True
         if self.hand[self.current_player]['cpu'] is False:
-            for sID in self.hand[self.current_player]['posindex']:
-                card = self.ids['card' + str(sID)]
-                anim = Animation(x=self.xpos_home[sID], y=0 - card.height, t='in_out_quad')
+            for sid in self.hand[self.current_player]['posindex']:
+                card = self.ids['card' + str(sid)]
+                anim = Animation(x=self.xpos_home[sid], y=0 - card.height, t='in_out_quad')
                 anim.start(card)
 
     def check_graphics(self):
@@ -235,20 +235,23 @@ class Game_Screen(Screen):
     def on_enter(self):
         Logger.info('on_enter FIRED')
         self.check_graphics()
-        iF = self.ids['infoFloat']
-        tI = self.ids['tableImage']
-        if Configed_Bool("General", "table") is True and tI not in iF.children:
+        i_f = self.ids['infoFloat']
+        t_i = self.ids['tableImage']
+        if Configed_Bool("General", "table") is True and t_i not in i_f.children:
             Logger.info('table image added')
-            iF.add_widget(tI)
-            Widget_ToTop(iF, self.ids['dealerLabel'])
-            for pNum in self.hand:
-                Widget_ToTop(iF, self.ids['p' + str(pNum) + 'nameLabel'])
-                for index in range(0, 5):
-                    Widget_ToTop(iF, self.ids['p' + str(pNum) + 'c' + str(index) + 'Image'])
-                    Widget_ToTop(iF, self.ids['p' + str(pNum) + 'c' + str(index) + 'DiscardImage'])
-        elif Configed_Bool("General", "table") is False and tI in iF.children:
+            i_f.add_widget(t_i)
+            Widget_ToTop(i_f, self.ids['dealerLabel'])
+            for pnum in self.hand:
+                Widget_ToTop(i_f, self.ids[f'p{pnum}nameLabel'])
+                for index in range(5):
+                    card_image_id = f'p{pnum}c{index}Image'
+                    discard_image_id = f'p{pnum}c{index}DiscardImage'
+                    Widget_ToTop(i_f, self.ids[card_image_id])
+                    Widget_ToTop(i_f, self.ids[discard_image_id])
+
+        elif Configed_Bool("General", "table") is False and t_i in i_f.children:
             Logger.info('table image removed')
-            iF.remove_widget(tI)
+            i_f.remove_widget(t_i)
         if self.holdIt is True:
             def unholdit(dt):
                 self.holdIt = False
@@ -282,9 +285,9 @@ class Game_Screen(Screen):
 
     def tutorial_text(self):
 
-        def card_text(cardID):
-            tmp = cardID.split('_of_')
-            suitTmp = tmp[1].split('.')
+        def card_text(card_id):
+            tmp = card_id.split('_of_')
+            suit_tmp = tmp[1].split('.')
             if tmp[0] == '11':
                 tmp[0] = 'jack'
             elif tmp[0] == '12':
@@ -293,7 +296,7 @@ class Game_Screen(Screen):
                 tmp[0] = 'king'
             elif tmp[0] == '14':
                 tmp[0] = 'ace'
-            return "Suggested card to play, " + tmp[0] + " of " + suitTmp[0]
+            return "Suggested card to play, " + tmp[0] + " of " + suit_tmp[0]
 
         if self.hand[self.current_player]['cpu'] is True:
             return ("... wait for the CPU players\n"
