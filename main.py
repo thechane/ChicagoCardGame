@@ -1,18 +1,20 @@
 import io
-import kivy
 from builtins import int
 from os import listdir
 from os.path import isfile
-from kivy.uix.settings import SettingsWithTabbedPanel
-from screens.Game_Screen import Game_Screen
-from screens.Menu_Screen import Menu_Screen
-from screens.Game_Over_Screen import Game_Over_Screen
+
+import kivy
 from kivy.app import App
-from kivy.logger import Logger
-from kivy.uix.screenmanager import ScreenManager, FadeTransition
-from kivy.uix.floatlayout import FloatLayout
 from kivy.core.image import Image as CoreImage
+from kivy.logger import Logger
 from kivy.properties import ObjectProperty
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.screenmanager import ScreenManager, FadeTransition
+from kivy.uix.settings import SettingsWithTabbedPanel
+
+from screens.GameScreen import GameScreen
+from screens.Game_Over_Screen import Game_Over_Screen
+from screens.Menu_Screen import Menu_Screen
 
 kivy.require('2.3.0')
 __version__ = "2.0"
@@ -35,7 +37,7 @@ class ChicagoApp(App):
             for f in listdir(path):
                 if isfile(path + '/' + f) and f.endswith('.png'):
                     data = io.BytesIO(open(path + '/' + f, "rb").read())
-                    CoreImage(data, ext="png", filename = path + '/' + f)
+                    CoreImage(data, ext="png", filename=path + '/' + f)
         # and the reset
         for f in ('cardborder.png', 'greenTable.jpg', 'simpleTable.jpg'):
             data = io.BytesIO(open('./images/' + f, "rb").read())
@@ -66,7 +68,7 @@ class ChicagoApp(App):
         Logger.info('new_game FIRED')
 
         config = ChicagoApp.get_running_app().config
-        pcount = int( config.getdefault("Varients", "playerCount", "2")) + 1
+        pcount = int(config.getdefault("Varients", "player_count", "2")) + 1
         pinfo = {}
         for index in range(1, pcount):
             pinfo[index] = {
@@ -74,34 +76,34 @@ class ChicagoApp(App):
                                           'Player' + str(index)),
                 'cpu': config.getdefault("Players", "p" + str(index) + "CPU", False)
             }
-        gs = Game_Screen(
-                name = 'gameScreen',
-                playerCount = pcount,
-                handCount = 5,
-                players = pinfo,
-                chicagoTwo = config.getdefault("Varients", "chicagoTwo", True),
-                rounds = int( config.getdefault("Varients", "roundCount", "2") ),
-                pokerRoundScoring = config.getdefault("Varients", "pokerRoundScoring", False),
-                pokerAfterShowdownScoring = config.getdefault("Varients",
-                                                              "pokerAfterShowdownScoring",
-                                                              True),
-                cardExchangePointsLimit = config.getdefault("Varients",
-                                                            "cardExchangePointsLimit",
-                                                            "46"),
-                negativeScoring = config.getdefault("Varients", "negativeScoring", True),
-                fourOfaKindReset = config.getdefault("Varients", "fourOfaKindReset", False),
-                viewDiscards = config.getdefault("Varients", "viewDiscards", True),
-                chicagoDestroy = config.getdefault("Varients", "chicagoDestroy", False),
-                Player1 = "{:<6}".format(config.getdefault("Players", "Player1", False)),
-                Player2 = "{:<6}".format(config.getdefault("Players", "Player2", False)),
-                Player3 = "{:<6}".format(config.getdefault("Players", "Player3", False)),
-                Player4 = "{:<6}".format(config.getdefault("Players", "Player4", False)),
-                p1CPU = config.getdefault("Players", "p1CPU", False),
-                p2CPU = config.getdefault("Players", "p2CPU", False),
-                p3CPU = config.getdefault("Players", "p3CPU", False),
-                p4CPU = config.getdefault("Players", "p4CPU", False),
-                gameData = gamedata
-            )
+        gs = GameScreen(
+            name='gameScreen',
+            player_count=pcount,
+            handCount=5,
+            players=pinfo,
+            chicagoTwo=config.getdefault("Varients", "chicagoTwo", True),
+            rounds=int(config.getdefault("Varients", "roundCount", "2")),
+            pokerRoundScoring=config.getdefault("Varients", "pokerRoundScoring", False),
+            pokerAfterShowdownScoring=config.getdefault("Varients",
+                                                        "pokerAfterShowdownScoring",
+                                                        True),
+            cardExchangePointsLimit=config.getdefault("Varients",
+                                                      "cardExchangePointsLimit",
+                                                      "46"),
+            negativeScoring=config.getdefault("Varients", "negativeScoring", True),
+            fourOfaKindReset=config.getdefault("Varients", "fourOfaKindReset", False),
+            viewDiscards=config.getdefault("Varients", "viewDiscards", True),
+            chicagoDestroy=config.getdefault("Varients", "chicagoDestroy", False),
+            Player1="{:<6}".format(config.getdefault("Players", "Player1", False)),
+            Player2="{:<6}".format(config.getdefault("Players", "Player2", False)),
+            Player3="{:<6}".format(config.getdefault("Players", "Player3", False)),
+            Player4="{:<6}".format(config.getdefault("Players", "Player4", False)),
+            p1CPU=config.getdefault("Players", "p1CPU", False),
+            p2CPU=config.getdefault("Players", "p2CPU", False),
+            p3CPU=config.getdefault("Players", "p3CPU", False),
+            p4CPU=config.getdefault("Players", "p4CPU", False),
+            gameData=gamedata
+        )
         if self.root.has_screen('gameScreen'):
             self.root.remove_widget(self.root.get_screen('gameScreen'))
         self.root.add_widget(gs)
@@ -125,7 +127,7 @@ class ChicagoApp(App):
             'tutorial': 1
         })
         config.setdefaults('Varients', {
-            'playerCount': 2,
+            'player_count': 2,
             'roundCount': 3,
             'straightFlushValue': 10,
             'cardExchangePointsLimit': 46,

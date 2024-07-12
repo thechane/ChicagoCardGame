@@ -51,7 +51,7 @@
     {"type": "options",
         "title": "Number of Players",
         "section": "Varients",
-        "key": "playerCount",
+        "key": "player_count",
         "options": ["2","3","4"]
     },
     {"type": "options",

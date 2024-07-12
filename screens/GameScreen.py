@@ -22,7 +22,7 @@ from brains.Common import (Widget_ToTop, Get_Next_Player,
                            Get_Config_Bool, Configed_Bool, Goto_Link)
 
 
-class Game_Screen(Screen):
+class GameScreen(Screen):
     # #positional offsets
     circleXoffset = 0
     circleYoffset = 0
@@ -54,7 +54,7 @@ class Game_Screen(Screen):
     p2CPU = BooleanProperty(True)
     p3CPU = BooleanProperty(False)
     p4CPU = BooleanProperty(False)
-    playerCount = NumericProperty(0)
+    player_count = NumericProperty(0)
     players = ObjectProperty(None)
     pokerAfterShowdownScoring = BooleanProperty(False)
     pokerRoundScoring = BooleanProperty(False)
@@ -64,8 +64,8 @@ class Game_Screen(Screen):
     def __init__(self, **kwargs):  # #Override Screen's constructor
         self.pressed_up = None
         self.pressed_down = None
-        Logger.info('Game_Screen init Fired')
-        super(Game_Screen, self).__init__(**kwargs)
+        Logger.info('GameScreen init Fired')
+        super(GameScreen, self).__init__(**kwargs)
         self.init = True  # #Is false until first Main_Float_Resize (delayed) fires
         self.holdIt = True
         self.tutor = None
@@ -108,7 +108,7 @@ class Game_Screen(Screen):
         self.tap_sound = SoundLoader.load('./sounds/tap.wav')
         self.dealCard_sound = SoundLoader.load('./sounds/dealing-card.wav')
         self.cheat_sound = SoundLoader.load('./sounds/cheat.wav')
-        self.dealerPlayer = kwargs.get('playerCount') - 1  # #player that started last game
+        self.dealerPlayer = kwargs.get('player_count') - 1  # #player that started last game
         self.stats = {}
         self.callChicago = []
         self.stats['player'] = {}  # #Either None or No, populated during chicago decision round
@@ -322,14 +322,14 @@ class Game_Screen(Screen):
                         "suggest No Chicago call")
         elif self.gameState['chicago'] == self.current_player:
             # Chicago
-            sID = self.B.Showdown_Turn_Self_Chicago(self.hand[self.current_player]['cardid'])
-            return card_text(self.hand[self.current_player]['cardid'][sID])
+            sid = self.B.Showdown_Turn_Self_Chicago(self.hand[self.current_player]['cardid'])
+            return card_text(self.hand[self.current_player]['cardid'][sid])
         elif self.gameState['chicago'] > 0:
             # Other Chicago
-            sID = self.B.Showdown_Turn_Other_Chicago(self.hand[self.current_player]['cardid'],
+            sid = self.B.Showdown_Turn_Other_Chicago(self.hand[self.current_player]['cardid'],
                                                      self.gameState['activeCard'],
                                                      self.current_player)
-            return card_text(self.hand[self.current_player]['cardid'][sID])
+            return card_text(self.hand[self.current_player]['cardid'][sid])
         elif self.gameState['chicago'] == 0:
             # Showdown without Chicago CPU play fired
             in_control = False
@@ -395,11 +395,11 @@ class Game_Screen(Screen):
 
     def reset_game(self, kwargs):
         try:
-            playerInfo = kwargs.get('players')
-            playerCount = kwargs.get('playerCount')
+            player_info = kwargs.get('players')
+            player_count = kwargs.get('player_count')
         except Exception as _e:
-            playerInfo = None
-            playerCount = None
+            player_info = None
+            player_count = None
         Logger.info('-----------------RESET FIRED---------------------' + str(kwargs))
         self.gameState = {
             'discards': set(),  # # empty set to hold the discard pile
@@ -421,7 +421,7 @@ class Game_Screen(Screen):
         except Exception as _e:
             self.stats['player'] = {}
             self.stats['plays'] = 0
-            for pnum in range(1, playerCount):
+            for pnum in range(1, player_count):
                 self.stats['player'][pnum] = {
                     'pokerWins': 0,
                     'highestPokerHand': 0,
@@ -443,8 +443,8 @@ class Game_Screen(Screen):
         tmp_hand = []
         tmp_index = []
 
-        if playerCount is None:  # new game
-            playerCount = len(self.hand) + 1
+        if player_count is None:  # new game
+            player_count = len(self.hand) + 1
         else:  # new round
             self.hand = {}
 
@@ -455,7 +455,7 @@ class Game_Screen(Screen):
         # #ensure we know the graphic settings first
         self.check_graphics()
         # #then reset the data
-        for index in range(1, playerCount):
+        for index in range(1, player_count):
             cpu = False
             try:
                 if int(kwargs.get('p' + str(index) + 'CPU')) == 1:
@@ -466,7 +466,7 @@ class Game_Screen(Screen):
             name = kwargs.get('Player' + str(index))
             score = 0
             can_discard = True
-            if playerInfo is None:
+            if player_info is None:
                 cpu = self.hand[index]['cpu']
                 name = self.hand[index]['name']
                 can_discard = self.hand[index]['can_discard']
@@ -855,7 +855,7 @@ class Game_Screen(Screen):
     def on_touch_down(self, touch):
         Logger.info('on_touch_down FIRED')
         self.pressed_down = touch.pos
-        super(Game_Screen, self).on_touch_down(touch)
+        super(GameScreen, self).on_touch_down(touch)
 
         if self.manager.current != 'gameScreen':
             return True
@@ -1064,7 +1064,7 @@ class Game_Screen(Screen):
     def on_touch_up(self, touch):
         Logger.info('on_touch_up FIRED')
         self.pressed_up = touch.pos
-        super(Game_Screen, self).on_touch_up(touch)
+        super(GameScreen, self).on_touch_up(touch)
 
         # #Check we are not pushing buttons or clicking above the card line
         if self.ids['tutorialLO'].children:  # #if tutorial box is open
