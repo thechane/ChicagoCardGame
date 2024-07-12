@@ -119,33 +119,33 @@ class Brain(object):
                 hand[pNum]["can_discard"] = True
 
     def Score_Hand(self, hand, straightFlushValue, fourKindToZero, stats):
-        for playerNum in hand:
+        for player_number in hand:
             # create tmp that removes DONE cards and readds those discarded during showdown
-            tmp = [value for value in hand[playerNum]
+            tmp = [value for value in hand[player_number]
                    ["cardid"] if value != "DONE"]
-            tmp.extend(hand[playerNum]["showDownDiscards"])
+            tmp.extend(hand[player_number]["showDownDiscards"])
             results = self.ID_Hand(tmp)
-            hand[playerNum]["hand"] = results[0]
-            hand[playerNum]["handScore"] = (
+            hand[player_number]["hand"] = results[0]
+            hand[player_number]["handScore"] = (
                 results[1], results[2][0], results[2][1])
         # calculate the scores storing the top marks in bestScore
         bestScore = (0, 0, 0)
-        for playerNum in hand:
-            # Logger.info('Player ' + str(playerNum) + ' hand : ' + str(hand[playerNum]))
+        for player_number in hand:
+            # Logger.info('Player ' + str(player_number) + ' hand : ' + str(hand[player_number]))
             if (
-                    hand[playerNum]["handScore"][0] > bestScore[0]
+                    hand[player_number]["handScore"][0] > bestScore[0]
                     or (
-                    hand[playerNum]["handScore"][0] == bestScore[0]
-                    and hand[playerNum]["handScore"][1] > bestScore[1]
+                    hand[player_number]["handScore"][0] == bestScore[0]
+                    and hand[player_number]["handScore"][1] > bestScore[1]
                     )
                     or (
-                    hand[playerNum]["handScore"][0] == bestScore[0]
-                    and hand[playerNum]["handScore"][1] == bestScore[1]
-                    and hand[playerNum]["handScore"][2] > bestScore[2]
+                    hand[player_number]["handScore"][0] == bestScore[0]
+                    and hand[player_number]["handScore"][1] == bestScore[1]
+                    and hand[player_number]["handScore"][2] > bestScore[2]
                     )
             ):
-                self.winner = playerNum
-                bestScore = hand[playerNum]["handScore"]
+                self.winner = player_number
+                bestScore = hand[player_number]["handScore"]
 
         def ScoreIt(h):
             # Add to the winning players score
@@ -165,9 +165,9 @@ class Brain(object):
             elif h == "4_OF_A_KIND":
                 s = 7
                 if fourKindToZero is True:
-                    for playerNum in hand:
-                        if playerNum != self.winner:
-                            hand[playerNum]["score"] = 0
+                    for player_number in hand:
+                        if player_number != self.winner:
+                            hand[player_number]["score"] = 0
             elif h == "STRAIGHT_FLUSH":
                 s = int(straightFlushValue)
             elif h == "ROYAL_FLUSH":
@@ -261,8 +261,8 @@ class Brain(object):
             discards.append(scatterID)
         return discards
 
-    def Chicago_Question(self, configData, handData, playerNum):
-        handID = self.ID_Hand(handData[playerNum]["cardid"])
+    def Chicago_Question(self, configData, handData, player_number):
+        handID = self.ID_Hand(handData[player_number]["cardid"])
         Logger.info("Chicago_Question FIRED on handID " + str(handID))
         splitHand = handID[3]
         if configData["pokerAfterShowdownScoring"] is True and handID[1] > 4000:
@@ -282,7 +282,7 @@ class Brain(object):
             # Consider have many of the same suit
             Logger.info(
                 "... risk = "
-                + str(handData[playerNum]["risk"])
+                + str(handData[player_number]["risk"])
                 + ", considering the "
                 + str(len(splitHand[suit]))
                 + " "
@@ -318,7 +318,7 @@ class Brain(object):
                         and aceCount >= 2
                         and (kingCount >= 2 or queenCount >= 2)
                     )
-            ) and randint(0, 9) < handData[playerNum][
+            ) and randint(0, 9) < handData[player_number][
                 "risk"
             ]:  # players have risk factor set between 0 and 9.
                 return True
@@ -328,13 +328,13 @@ class Brain(object):
                 self.ofAKindResult[0][0] > 11 or self.ofAKindResult[1][0] > 11
         ):
             # If pair is high and we have at least one more highish card
-            for cardName in handData[playerNum]["cardid"]:
+            for cardName in handData[player_number]["cardid"]:
                 cardID = self.ID_Card(cardName)
                 if (
                         cardID[0] > 13
                         and cardID[0] != self.ofAKindResult[0][0]
                         and len(handData) < 4
-                        and randint(0, 9) < handData[playerNum]["risk"]
+                        and randint(0, 9) < handData[player_number]["risk"]
                 ):
                     return True
         if (
@@ -640,7 +640,7 @@ class Brain(object):
     def Next_Play(self, gsInst):
         # todo - readd save game below
         cPlayer = copy(gsInst.current_player)
-        gsInst.Save_Game()
+        gsInst.save_game()
 
         def _Next_Play():
             Logger.info(
@@ -767,8 +767,8 @@ class Brain(object):
                     anim = Animation(x=Pos[0], y=Pos[1],
                                      d=duration, t="in_out_quad")
                     anim = anim + Animation(
-                        x=gsInst.smallCardPos[cPlayer - 1][scatterID][0],
-                        y=gsInst.smallCardPos[cPlayer - 1][scatterID][1],
+                        x=gsInst.small_card_possition[cPlayer - 1][scatterID][0],
+                        y=gsInst.small_card_possition[cPlayer - 1][scatterID][1],
                         d=0.5,
                         t="in_out_quad",
                     )

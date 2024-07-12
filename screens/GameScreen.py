@@ -62,6 +62,10 @@ class GameScreen(Screen):
     viewDiscards = BooleanProperty(False)
 
     def __init__(self, **kwargs):  # #Override Screen's constructor
+        self.discardCardPos = None
+        self.name_label_possition = None
+        self.small_card_possition = None
+        self.dealer_possition = None
         self.pressed_up = None
         self.pressed_down = None
         Logger.info('GameScreen init Fired')
@@ -499,21 +503,17 @@ class GameScreen(Screen):
         if self.init is False:
             self.holdIt = True
             gc.collect()
-            # Logger.info('Unreachable objects:')
-            # Logger.info(str(gc.collect()))
-            # Logger.info('Remaining Garbage:')
-            # Logger.info(str(pprint.pprint(gc.garbage)))
             self.Main_Float_Resize()
 
         if kwargs.get('nextTurn') is True:
-            newPlayer = Get_Next_Player(self.dealerPlayer, len(self.hand))
-            if newPlayer == self.current_player:
+            new_player = Get_Next_Player(self.dealerPlayer, len(self.hand))
+            if new_player == self.current_player:
                 self.B.Next_Play(self)
             else:
-                self.current_player = newPlayer
+                self.current_player = new_player
 
-    def Save_Game(self):
-        Logger.info('Save_Game Fired')
+    def save_game(self):
+        Logger.info('save_game Fired')
         data = {
             'hand': copy(self.hand),
             'gameState': copy(self.gameState),
@@ -530,128 +530,126 @@ class GameScreen(Screen):
             cpickle.dump(data, f)
             f.close()
         except:
-            Logger.error('Save_Game Failed')
+            Logger.error('save_game Failed')
 
-    def Recalc_Dealer(self):
-        Logger.info('FIRED: Recalc_Dealer')
-        iF = self.ids['infoFloat']
-        dealerXoffset = iF.height * self.circleScale / 6
-        dealerYoffset = iF.height * self.circleScale / 3
-        self.dealerPos = [
-            [iF.center_x + dealerXoffset + self.circleXoffset,
-             iF.center_y + (iF.height * self.circleScale) - self.circleYoffset + dealerYoffset],
-            [iF.center_x + dealerXoffset + self.circleXoffset,
-             iF.center_y + (iF.height * self.circleScale) - self.circleYoffset - dealerYoffset],
-            [iF.center_x - dealerXoffset + self.circleXoffset,
-             iF.center_y + (iF.height * self.circleScale) - self.circleYoffset - dealerYoffset],
-            [iF.center_x - dealerXoffset + self.circleXoffset,
-             iF.center_y + (iF.height * self.circleScale) - self.circleYoffset + dealerYoffset]
+    def recalc_dealer(self):
+        Logger.info('FIRED: recalc_dealer')
+        i_f = self.ids['infoFloat']
+        dealer_xoffset = i_f.height * self.circleScale / 6
+        dealer_yoffset = i_f.height * self.circleScale / 3
+        self.dealer_possition = [
+            [i_f.center_x + dealer_xoffset + self.circleXoffset,
+             i_f.center_y + (i_f.height * self.circleScale) - self.circleYoffset + dealer_yoffset],
+            [i_f.center_x + dealer_xoffset + self.circleXoffset,
+             i_f.center_y + (i_f.height * self.circleScale) - self.circleYoffset - dealer_yoffset],
+            [i_f.center_x - dealer_xoffset + self.circleXoffset,
+             i_f.center_y + (i_f.height * self.circleScale) - self.circleYoffset - dealer_yoffset],
+            [i_f.center_x - dealer_xoffset + self.circleXoffset,
+             i_f.center_y + (i_f.height * self.circleScale) - self.circleYoffset + dealer_yoffset]
         ]
         Logger.info(
-            'recalc dealer for player ' + str(self.dealerPlayer) + ' to:' + str(self.dealerPos))
+            'recalc dealer for player ' + str(self.dealerPlayer) + ' to:' + str(self.dealer_possition))
         self.Move_Dealer_Chip()
 
-    def Recalc_Small_Cards(self):
-        iF = self.ids['infoFloat']
+    def recalc_small_cards(self):
+        i_f = self.ids['infoFloat']
         counter = 0
-        self.smallCardPos = []
-        self.nameLabelPos = []
-        for playerNum in self.hand:
+        self.small_card_possition = []
+        self.name_label_possition = []
+        for player_number in self.hand:
             tmpList = []
-            for _cardIndex in range(0, self.setConfig['handCount']):
+            for _card_index in range(0, self.setConfig['handCount']):
                 x = 0
-                if playerNum == 1 or playerNum == 2:
-                    x = iF.center_x + self.circleXoffset + iF.height * \
+                if player_number == 1 or player_number == 2:
+                    x = i_f.center_x + self.circleXoffset + i_f.height * \
                         self.smallCardOffset[counter][0]
                 else:
-                    x = iF.center_x + self.circleXoffset - iF.height * \
+                    x = i_f.center_x + self.circleXoffset - i_f.height * \
                         self.smallCardOffset[counter][0]
-                y = iF.center_y + iF.height * self.smallCardOffset[counter][1] - self.circleYoffset
+                y = i_f.center_y + i_f.height * self.smallCardOffset[counter][1] - self.circleYoffset
                 tmpList.append([x, y])
                 counter = counter + 1
-            self.smallCardPos.append(tmpList)
+            self.small_card_possition.append(tmpList)
 
-    def Recalc_Discard_Cards(self):
-        iF = self.ids['infoFloat']
+    def recalc_discard_card(self):
+        i_f = self.ids['infoFloat']
         counter = 0
         self.discardCardPos = []
-        customOffset = 0
+        custom_offset = 0
         if self.portrait is False and self.smallScreen is False:
-            customOffset = iF.width * 0.026
-            self.dCardsize = iF.height * 0.13, iF.height * 0.21
+            custom_offset = i_f.width * 0.026
+            self.dCardsize = i_f.height * 0.13, i_f.height * 0.21
         else:
-            self.dCardsize = iF.height * 0.12, iF.height * 0.18
-        xOffset = (iF.height * self.circleScale + customOffset)
-        for playerNum in self.hand:
-            tmpList = []
+            self.dCardsize = i_f.height * 0.12, i_f.height * 0.18
+        x_offset = (i_f.height * self.circleScale + custom_offset)
+        for player_number in self.hand:
+            tmp_list = []
             if Get_Config_Bool(self.setConfig['viewDiscards']) is True:
-                xOffset = (iF.height * self.circleScale + customOffset) - self.ids[
+                x_offset = (i_f.height * self.circleScale + custom_offset) - self.ids[
                     'p1c0DiscardImage'].width * 0.2
-            for _cardIndex in range(0, self.setConfig['handCount']):
+            for card_index in range(0, self.setConfig['handCount']):
                 x = 0
                 y = 0
-                self.ids['p' + str(playerNum) + 'c' + str(
-                    _cardIndex) + 'DiscardImage'].size = self.dCardsize
+                self.ids['p' + str(player_number) + 'c' + str(
+                    card_index) + 'DiscardImage'].size = self.dCardsize
                 if Get_Config_Bool(self.setConfig['viewDiscards']) is True:
-                    xOffset = xOffset + self.ids['p1c0DiscardImage'].width * 0.2
-                if playerNum == 2:
-                    x = iF.center_x + self.circleXoffset + xOffset
-                    y = iF.center_y + (iF.height * self.circleScale) - self.circleYoffset + (
-                                iF.height * self.circleScale / 6)
-                elif playerNum == 1:
-                    x = iF.center_x + self.circleXoffset + xOffset
-                    y = iF.center_y + (iF.height * self.circleScale) - self.circleYoffset - (
-                                iF.height * self.circleScale)
-                elif playerNum == 3:
-                    x = iF.center_x + self.circleXoffset - xOffset - iF.height * 0.12  # iF.height calc must match Kivy file
-                    y = iF.center_y + (iF.height * self.circleScale) - self.circleYoffset - (
-                                iF.height * self.circleScale)
-                elif playerNum == 4:
-                    x = iF.center_x + self.circleXoffset - xOffset - iF.height * 0.12  # iF.height calc must match Kivy file
-                    y = iF.center_y + (iF.height * self.circleScale) - self.circleYoffset + (
-                                iF.height * self.circleScale / 6)
-                tmpList.append([x, y])
+                    x_offset = x_offset + self.ids['p1c0DiscardImage'].width * 0.2
+                if player_number == 2:
+                    x = i_f.center_x + self.circleXoffset + x_offset
+                    y = i_f.center_y + (i_f.height * self.circleScale) - self.circleYoffset + (
+                                i_f.height * self.circleScale / 6)
+                elif player_number == 1:
+                    x = i_f.center_x + self.circleXoffset + x_offset
+                    y = i_f.center_y + (i_f.height * self.circleScale) - self.circleYoffset - (
+                                i_f.height * self.circleScale)
+                elif player_number == 3:
+                    x = i_f.center_x + self.circleXoffset - x_offset - i_f.height * 0.12  # i_f.height calc must match Kivy file
+                    y = i_f.center_y + (i_f.height * self.circleScale) - self.circleYoffset - (
+                                i_f.height * self.circleScale)
+                elif player_number == 4:
+                    x = i_f.center_x + self.circleXoffset - x_offset - i_f.height * 0.12  # i_f.height calc must match Kivy file
+                    y = i_f.center_y + (i_f.height * self.circleScale) - self.circleYoffset + (
+                                i_f.height * self.circleScale / 6)
+                tmp_list.append([x, y])
                 counter = counter + 1
-            if playerNum == 1 or playerNum == 2:
-                self.discardCardPos.insert(0, tmpList)
+            if player_number == 1 or player_number == 2:
+                self.discardCardPos.insert(0, tmp_list)
             else:
-                self.discardCardPos.append(tmpList)
+                self.discardCardPos.append(tmp_list)
         Logger.info('recalced discardCardPos: ' + str(self.discardCardPos))
 
-    def Deal_Smallcards(self, index):
-        Logger.info('Deal_Smallcards fired with index ' + str(index))
+    def deal_smallcards(self, index):
+        Logger.info('deal_smallcards fired with index ' + str(index))
         # Logger.info('deal_smallcards fired -- INDEX = ' + str(index))
         self.dealingCards = True
 
         def callback(a, w):
-            self.Deal_Smallcards(index + 1)
+            self.deal_smallcards(index + 1)
             return True
 
         if index < self.setConfig['handCount'] * len(self.hand):
             self.ids['endTurnButton'].disabled = True
             self.ids['yesChicagoButton'].disabled = True
             self.ids['noChicagoButton'].disabled = True
-            playerOffset = int(index / self.setConfig['handCount']) + 1
-            player = None
-            if self.dealerPlayer + playerOffset > len(self.hand):
-                player = self.dealerPlayer + playerOffset - len(self.hand)
+            player_offset = int(index / self.setConfig['handCount']) + 1
+            if self.dealerPlayer + player_offset > len(self.hand):
+                player = self.dealerPlayer + player_offset - len(self.hand)
             else:
-                player = self.dealerPlayer + playerOffset
+                player = self.dealerPlayer + player_offset
             card = index % self.setConfig['handCount']
-            anim = None
             Logger.info('Anim for player ' + str(player) + ' card ' + str(card))
-            scW = self.ids['p' + str(player) + 'c' + str(card) + 'Image']
+            scw = self.ids['p' + str(player) + 'c' + str(card) + 'Image']
             if player > len(self.hand) or self.hand[player]['cardid'][card] == 'DONE':
                 # #if the card is done do not move it
-                anim = Animation(x=scW.pos[0], y=scW.pos[1], d=0.1)
+                anim = Animation(x=scw.pos[0], y=scw.pos[1], d=0.1)
             else:
-                anim = Animation(x=self.smallCardPos[player - 1][card][0],
-                                 y=self.smallCardPos[player - 1][card][1], d=0.1, t='in_out_quad')
+                anim = Animation(x=self.small_card_possition[player - 1][card][0],
+                                 y=self.small_card_possition[player - 1][card][1], d=0.1, t='in_out_quad')
             anim.bind(on_complete=callback)
             # #first position small card relative to dealer
-            scW.pos = self.Position_Small_Card_Offscreen(scW)
+            scw.pos = self.Position_Small_Card_Offscreen(scw)
             # #Then start the recursive animation call
-            anim.start(scW)
+            anim.start(scw)
             return True
         else:
             self.dealingCards = False
@@ -668,8 +666,8 @@ class GameScreen(Screen):
             return 0 - scW.width * 2, iF.height + scW.height * 2
 
     def Move_Dealer_Chip(self):
-        dealerAnim = Animation(x=self.dealerPos[int(self.dealerPlayer) - 1][0],
-                               y=self.dealerPos[int(self.dealerPlayer) - 1][1], d=0.5)
+        dealerAnim = Animation(x=self.dealer_possition[int(self.dealerPlayer) - 1][0],
+                               y=self.dealer_possition[int(self.dealerPlayer) - 1][1], d=0.5)
         dealerAnim.start(self.ids['dealerLabel'])
 
     def Main_Float_Resize(self):
@@ -703,25 +701,25 @@ class GameScreen(Screen):
             # #Dealer Chip pos
             Logger.info('Delayed_Resize FIRED')
             self.Update_Player_Circle()
-            self.Recalc_Dealer()
-            # self.ids['dealerLabel'].pos = self.dealerPos[int(self.dealerPlayer) - 1][0],self.dealerPos[int(self.dealerPlayer) - 1][1]
+            self.recalc_dealer()
+            # self.ids['dealerLabel'].pos = self.dealer_possition[int(self.dealerPlayer) - 1][0],self.dealer_possition[int(self.dealerPlayer) - 1][1]
             # #smallCard positions
-            self.Recalc_Small_Cards()
-            self.Recalc_Discard_Cards()
+            self.recalc_small_cards()
+            self.recalc_discard_card()
             # #DEAL SMALLCARDS giving them 2 seconds to wait since we want layout sizes fully calculated
-            self.Deal_Smallcards(0)
+            self.deal_smallcards(0)
             # if the small dis cards are on the screen, re adjust them
-            for playerNum in self.hand:
-                plab = self.ids['p' + str(playerNum) + 'nameLabel']
+            for player_number in self.hand:
+                plab = self.ids['p' + str(player_number) + 'nameLabel']
                 if self.smallScreen:
                     plab.font_size = '14sp'
                 else:
                     plab.font_size = '20sp'
-                for index in self.hand[playerNum]['posindex']:
-                    dCard = self.ids['p' + str(playerNum) + 'c' + str(index) + 'DiscardImage']
+                for index in self.hand[player_number]['posindex']:
+                    dCard = self.ids['p' + str(player_number) + 'c' + str(index) + 'DiscardImage']
                     if '/back/' not in dCard.source:  # #If not showing the back of a card
-                        animDiscard = Animation(x=self.discardCardPos[playerNum - 1][index][0],
-                                                y=self.discardCardPos[playerNum - 1][index][1],
+                        animDiscard = Animation(x=self.discardCardPos[player_number - 1][index][0],
+                                                y=self.discardCardPos[player_number - 1][index][1],
                                                 t='in_out_quad')
                         animDiscard.start(dCard)
             # #see on_touch_up for usage of:
@@ -1625,7 +1623,7 @@ class GameScreen(Screen):
                     self.stats['winner'] = pNum
                     for pNum in range(1, len(self.hand) + 1):
                         self.stats['player'][pNum]['score'] = self.hand[pNum]['score']
-                    self.Save_Game()
+                    self.save_game()
                     self.manager.current = 'gameOverScreen'
                     return True
             return False
@@ -1815,14 +1813,14 @@ class GameScreen(Screen):
                     else:
                         self.reset_game({'nextTurn': False})
 
-                for playerNum in self.hand:
+                for player_number in self.hand:
                     for index in range(0, self.setConfig['handCount']):
-                        smallCard = self.ids['p' + str(playerNum) + 'c' + str(index) + 'Image']
+                        smallCard = self.ids['p' + str(player_number) + 'c' + str(index) + 'Image']
                         anim = Animation(x=self.xpos_center, y=0 - smallCard.height * 10,
                                          t='in_out_quart')
-                        # Logger.info( str(len(self.hand)) + str(len(self.hand[playerNum]['posindex'])) + str(playerNum) + str(index) )
-                        if playerNum == len(self.hand) and index == len(
-                                self.hand[playerNum]['posindex']) - 1:
+                        # Logger.info( str(len(self.hand)) + str(len(self.hand[player_number]['posindex'])) + str(player_number) + str(index) )
+                        if player_number == len(self.hand) and index == len(
+                                self.hand[player_number]['posindex']) - 1:
                             anim.bind(on_complete=done_animation)
                         anim.start(smallCard)
 
@@ -1945,9 +1943,9 @@ class GameScreen(Screen):
         infoFloat = self.ids['infoFloat']
         xPos = infoFloat.width + self.width
         yPos = infoFloat.height + self.height
-        for playerNum in self.hand:
-            for index in self.hand[playerNum]['posindex']:
-                dCard = self.ids['p' + str(playerNum) + 'c' + str(index) + 'DiscardImage']
+        for player_number in self.hand:
+            for index in self.hand[player_number]['posindex']:
+                dCard = self.ids['p' + str(player_number) + 'c' + str(index) + 'DiscardImage']
                 dCard.source = self.cardSmallBackImagePath
                 animDiscard = Animation(x=xPos, y=yPos, t='in_out_quad')
                 animDiscard.start(dCard)
@@ -1992,8 +1990,8 @@ class GameScreen(Screen):
             duration = 1
             if Configed_Bool("General", "fastPlay") is True:
                 duration = 0.5
-            animSmallCard = Animation(x=self.smallCardPos[cPlayer - 1][w.sID][0],
-                                      y=self.smallCardPos[cPlayer - 1][w.sID][1],
+            animSmallCard = Animation(x=self.small_card_possition[cPlayer - 1][w.sID][0],
+                                      y=self.small_card_possition[cPlayer - 1][w.sID][1],
                                       d=duration,
                                       t='in_out_quad')
             if int(w.sID) == int(lastScatter):
